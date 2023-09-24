@@ -1,0 +1,53 @@
+.OrderInfo {
+	//border: 1px solid red;
+	margin-top: auto;
+	padding-top: 20px;
+	display: flex;
+	justify-content: space-between;
+	column-gap: 30px;
+
+	> div {
+		//border: 1px solid red;
+	}
+
+	.OrderInfoPrices {
+		display: flex;
+		flex-direction: column;
+		row-gap: 8px;
+
+		.price,
+		.discount {
+			font-weight: 500;
+			font-size: 18px;
+		}
+
+		.price {
+		}
+
+		.discount {
+			color: red;
+		}
+
+		.totalPrice {
+			font-size: 30px;
+			font-weight: bold;
+		}
+	}
+
+	.productListBtns {
+		display: flex;
+		align-items: center;
+		column-gap: 20px;
+		margin-top: auto;
+
+		.btnPayment {
+			//width: 150px;
+			background: #69cd55;
+		}
+
+		.btnClear {
+			//width: 62px;
+			background: #f72727;
+		}
+	}
+}

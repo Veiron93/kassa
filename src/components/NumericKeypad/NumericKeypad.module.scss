@@ -1,0 +1,25 @@
+.NumericKeypad {
+	grid-template-columns: repeat(3, 1fr);
+	display: grid;
+	gap: 16px;
+	padding: 15px;
+
+	.NumericKeypadButton {
+		&:nth-child(11) {
+			grid-column: 2 / 4;
+		}
+	}
+}
+
+.NumericKeypadButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 62px;
+	cursor: pointer;
+	user-select: none;
+	background: #fff;
+	font-size: 30px;
+	font-weight: 500;
+	//border: 1px solid red;
+}

@@ -1,0 +1,63 @@
+.CodeProduct {
+	//border: 1px solid red;
+	margin-top: auto;
+	background: #4e4e4e;
+
+	&Preview {
+		height: 60px;
+		padding: 0px 10px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		column-gap: 10px;
+		background: #0b2e4a;
+
+		&Number {
+			//border: 1px solid red;
+			font-size: 22px;
+			font-weight: 500;
+			letter-spacing: 5px;
+			color: #fff;
+		}
+
+		&Btns {
+			user-select: none;
+
+			> div {
+				//border: 1px solid red;
+			}
+
+			.BtnDel {
+				height: 40px;
+				width: 40px;
+
+				background-image: url(./img/del.svg);
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: 80%;
+			}
+		}
+	}
+
+	&Show {
+		border: 1px solid red;
+		height: 54px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-transform: uppercase;
+		font-weight: 500;
+		background: red;
+		color: #fff;
+		cursor: pointer;
+		user-select: none;
+	}
+}
+
+// .CodeProduct.active {
+// 	//border-color: green;
+
+// 	.CodeProductShow {
+// 		display: none;
+// 	}
+// }

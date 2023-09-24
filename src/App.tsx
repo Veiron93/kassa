@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { RouterProvider } from "react-router-dom";
+
+// router
+import router from "./router/index";
+
+// store
+import { Provider as StoreProvider } from "react-redux";
+import { setupStore } from "./store/store";
+
+import "./assets/scss/main.scss";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	console.log(router);
+
+	const store = setupStore();
+
+	return (
+		<div className="App">
+			<StoreProvider store={store}>
+				<RouterProvider router={router} />
+			</StoreProvider>
+		</div>
+	);
 }
 
 export default App;

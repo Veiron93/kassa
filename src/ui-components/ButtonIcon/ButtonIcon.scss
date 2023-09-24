@@ -1,0 +1,19 @@
+@import "./src/assets/scss/vars";
+
+.buttonIcon {
+	border-radius: $brs;
+	background: #999;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 54px;
+	font-size: 18px;
+	padding: 0px 25px;
+
+	cursor: pointer;
+
+	img {
+		height: 20px;
+	}
+}

@@ -1,0 +1,25 @@
+.layout {
+	display: flex;
+	justify-content: space-between;
+
+	max-width: 1400px;
+	height: 100dvh;
+
+	margin: 0 auto;
+
+	&Content {
+		//border: 1px solid red;
+		width: 100%;
+		padding: 0px 10px 10px;
+	}
+
+	&Side {
+		display: flex;
+		flex-direction: column;
+		flex: none;
+		width: 30%;
+		min-width: 320px;
+		padding: 10px;
+		background: #f5f5f5;
+	}
+}
