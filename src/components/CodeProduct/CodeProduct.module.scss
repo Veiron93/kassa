@@ -40,14 +40,13 @@
 	}
 
 	&Show {
-		border: 1px solid red;
 		height: 54px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		text-transform: uppercase;
 		font-weight: 500;
-		background: red;
+		background: #60605c;
 		color: #fff;
 		cursor: pointer;
 		user-select: none;

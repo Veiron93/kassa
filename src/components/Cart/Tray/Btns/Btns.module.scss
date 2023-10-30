@@ -1,0 +1,24 @@
+.btnsTrayProductsList {
+	//border: 1px solid red;
+
+	display: flex;
+	align-items: center;
+	column-gap: 20px;
+	margin-top: auto;
+
+	.btnPayment {
+		background: #69cd55;
+		height: 54px;
+		width: 120px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		color: #fff;
+	}
+
+	.btnClear {
+		//width: 62px;
+		background: #f72727;
+	}
+}

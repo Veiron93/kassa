@@ -1,0 +1,52 @@
+.payment {
+	//border: 1px solid red;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+
+	&ProductsList {
+		//border: 1px solid red;
+
+		.product {
+			border: 1px solid red;
+
+			&:not(:last-child) {
+				margin-bottom: 10px;
+			}
+		}
+	}
+
+	&Method {
+		margin-top: auto;
+		padding: 10px;
+		//border: 1px solid red;
+
+		&Title {
+			font-size: 24px;
+			font-weight: 500;
+		}
+
+		&List {
+			margin-top: 15px;
+			display: flex;
+			column-gap: 20px;
+		}
+	}
+
+	&Footer {
+		margin-top: 50px;
+		display: flex;
+		justify-content: flex-end;
+
+		.btnCancel {
+			background: red;
+			height: 54px;
+			width: 120px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 18px;
+			color: #fff;
+		}
+	}
+}

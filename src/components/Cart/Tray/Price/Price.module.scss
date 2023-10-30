@@ -1,0 +1,23 @@
+.pricesTrayProductsList {
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
+
+	.price,
+	.discount {
+		font-weight: 500;
+		font-size: 18px;
+	}
+
+	.price {
+	}
+
+	.discount {
+		color: red;
+	}
+
+	.totalPrice {
+		font-size: 30px;
+		font-weight: bold;
+	}
+}

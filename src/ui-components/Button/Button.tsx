@@ -1,9 +1,14 @@
 // Styles
-import { Children } from "react";
 import "./button.scss";
 
 const Button = function (props: any) {
-	return <div className={`button ${props.className}`}>{props.children}</div>;
+	let className = props.className ? props.className : "";
+
+	return (
+		<div className={`button ${className}`} onClick={props.onClick ?? props.onClick}>
+			{props.children}
+		</div>
+	);
 };
 
 export default Button;

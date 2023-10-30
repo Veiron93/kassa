@@ -1,0 +1,26 @@
+.buttonGroup {
+	//border: 1px solid red;
+	display: flex;
+
+	&Btn {
+		//border: 1px solid red;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 3px 15px;
+		background: #c2c2c2;
+		cursor: pointer;
+		user-select: none;
+		width: 100%;
+		min-width: 100px;
+		height: 54px;
+
+		&Active {
+			background: red;
+		}
+
+		// &[data-active="1"] {
+		// 	background: red;
+		// }
+	}
+}

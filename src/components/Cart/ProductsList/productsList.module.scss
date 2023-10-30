@@ -1,0 +1,23 @@
+@import "./src/assets/scss/vars";
+
+.productsList {
+	//border: 1px solid red;
+	height: 100%;
+	margin-top: -10px;
+
+	&:empty {
+		//border-color: blue;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&:before {
+			//border: 1px solid red;
+
+			content: "Отсканируйте товар или добавьте вручную";
+			font-weight: 500;
+			font-size: 30px;
+			color: #dedede;
+		}
+	}
+}
