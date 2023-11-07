@@ -16,9 +16,10 @@ const ProductDiscount = () => {
 
 	// state
 	const { product } = useAppSelector((state: any) => state.ProductDiscountReducer);
+	const { productsDiscount } = useAppSelector((state: any) => state.CartReducer);
 
 	// actions
-	const { onStateAddProducts, addDiscountProduct: cartAddDiscountProduct, delDiscountProduct: cartDelDiscountProduct } = CartSlice.actions;
+	const { onStateAddProducts, addDiscountProduct, delDiscountProduct } = CartSlice.actions;
 	const { hidden: hiddenDiscount } = ProductDiscountSlice.actions;
 
 	useEffect(() => {
@@ -58,10 +59,10 @@ const ProductDiscount = () => {
 		range: itemsRangeDiscount[0].value as number,
 	};
 
-	if (product.discount) {
-		discount.value = product.discount.value;
-		discount.typeValue = product.discount.typeValue;
-		discount.range = product.discount.range;
+	if (productsDiscount[product.code]) {
+		discount.value = productsDiscount[product.code].value;
+		discount.typeValue = productsDiscount[product.code].typeValue;
+		discount.range = productsDiscount[product.code].range;
 	}
 
 	const [errorFormDiscount, setErrorFormDiscount] = useState<string | null>(null);
@@ -86,16 +87,16 @@ const ProductDiscount = () => {
 			return false;
 		}
 
-		addDiscountProduct();
+		onAddDiscountProduct();
+	}
+
+	function onAddDiscountProduct() {
+		dispatch(addDiscountProduct({ productCode: product.code, discount: discount }));
 		dispatch(hiddenDiscount());
 	}
 
-	function addDiscountProduct() {
-		dispatch(cartAddDiscountProduct({ code: product.code, discount: discount }));
-	}
-
-	function delDiscount() {
-		dispatch(cartDelDiscountProduct(product.code));
+	function onDelDiscount() {
+		dispatch(delDiscountProduct({ productCode: product.code }));
 		dispatch(hiddenDiscount());
 	}
 
@@ -104,6 +105,8 @@ const ProductDiscount = () => {
 			<div className={styles.productDiscount}>
 				<div className={styles.productDiscountWrapper}>
 					<div className={styles.productName}>{product.name}</div>
+
+					{/* {productsDiscount && Object.keys(productsDiscount).length > 0 && <p>dwfewfewfw</p>} */}
 
 					<div className={styles.form}>
 						<input type="number" placeholder="Скидка" defaultValue={discount.value} onChange={onValueDiscount} />
@@ -117,14 +120,12 @@ const ProductDiscount = () => {
 						<ButtonGroup btns={itemsRangeDiscount} activeItem={discount.range} onChange={onRangeDiscount} />
 					</div>
 
-					{/* <div className={styles.typeDiscount}></div> */}
-
 					{errorFormDiscount && <div className={styles.error}>{errorFormDiscount}</div>}
 
 					<div className={styles.btns}>
 						<Button onClick={validationFormDiscount}>ОК</Button>
 						<Button onClick={() => dispatch(hiddenDiscount())}>Отмена</Button>
-						<Button onClick={delDiscount}>Удалить</Button>
+						<Button onClick={onDelDiscount}>Удалить</Button>
 					</div>
 				</div>
 			</div>

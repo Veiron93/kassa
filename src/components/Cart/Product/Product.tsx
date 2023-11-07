@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 
+import { priceProduct } from "@/helpers/cart";
+
 import { Product } from "@/modules/products";
 
 import styles from "./product.module.scss";
 
 //store
-import { useAppDispatch } from "@/store/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
 import { CartSlice } from "@/store/reducers/CartSlice";
 import { ProductDiscountSlice } from "@/store/reducers/ProductDiscountSlice";
 
@@ -15,127 +17,65 @@ import Icons from "@/ui-components/Icons/Icons";
 const ProductListGoods = (props: any) => {
 	const product: Product = props.product;
 
-	// COUNT PRODUCT
-	const { changeQuanty, del, setProductsDiscount } = CartSlice.actions;
+	// STORE
 	const dispatch = useAppDispatch();
 
+	// state
+	const { productsDiscount } = useAppSelector((state: any) => state.CartReducer);
+
+	// actions
+	const { changeQuanty, del, delDiscountProduct } = CartSlice.actions;
+	const { show: showDiscount } = ProductDiscountSlice.actions;
+
+	// --
+
+	// COUNT PRODUCT
 	function changeQuantyProduct(type: string) {
 		let quanty: number | null = null;
 
-		if (type === "minus") {
-			quanty = -1;
-		}
+		if (type === "minus") quanty = -1;
+		if (type === "plus") quanty = 1;
 
-		if (type === "plus") {
-			quanty = 1;
-		}
-
-		if (type === "manual") {
-		}
+		// if (type === "manual") {
+		// }
 
 		dispatch(changeQuanty({ code: product.code, quanty: quanty, type: type }));
 	}
 
-	// PRICE
-	const { show: showDiscount } = ProductDiscountSlice.actions;
+	// --
 
+	// DELETE PRODUCT
+	function onDelProduct() {
+		dispatch(del(product.code));
+		dispatch(delDiscountProduct({ productCode: product.code }));
+	}
+
+	// --
+
+	// PRICE
 	const [priceProductTotal, setPriceProductTotal] = useState<number>(0);
 	const [unitPriceProduct, setUnitPriceProduct] = useState<number>(0);
 	const [discountSum, setDiscountSum] = useState<number>(0);
 
+	//useEffect(onRecountPrice, [product.quanty]);
+
 	useEffect(() => {
-		recountProductPrice();
-	}, [product.quanty, product.discount]);
-
-	function recountProductPrice() {
-		let priceProduct: number = 0;
-		let unitPriceProduct: number = 0;
-		let discountSum: number = 0;
-
-		let valueDiscount: number = 0;
-		let typeValueDiscount: number | null = null;
-		let rangeDiscount: number | null = null;
-
-		const discount = product.discount;
-
-		if (discount && product.discount) {
-			valueDiscount = product.discount.value;
-			typeValueDiscount = product.discount.typeValue;
-			rangeDiscount = product.discount.range;
+		if (productsDiscount[product.code]) {
+			onRecountPrice(productsDiscount[product.code]);
 		} else {
-			priceProduct = product.price * product.quanty;
-			unitPriceProduct = product.price;
+			onRecountPrice();
 		}
+	}, [product.quanty, productsDiscount]);
 
-		// скидка в рублях
-		if (typeValueDiscount === 1) {
-			// на один товар
-			if (rangeDiscount === 1) {
-				let x = product.price - valueDiscount;
-				let x2 = product.price * (product.quanty - 1);
+	function onRecountPrice(discount = null) {
+		const recountResult = priceProduct(product, discount);
 
-				priceProduct = x + x2;
-				unitPriceProduct = product.price - valueDiscount / product.quanty;
-				discountSum = valueDiscount;
-			}
-
-			// на каждый товар
-			if (rangeDiscount === 2) {
-				let x = valueDiscount * product.quanty;
-
-				priceProduct = product.price * product.quanty - x;
-				unitPriceProduct = product.price - valueDiscount;
-				discountSum = x;
-			}
-
-			// распределение скидки на всё количество
-			if (rangeDiscount === 3) {
-				priceProduct = product.price * product.quanty - valueDiscount;
-				unitPriceProduct = product.price - valueDiscount / product.quanty;
-				discountSum = valueDiscount;
-			}
-		}
-
-		// скидка в процентах
-		if (typeValueDiscount === 2) {
-			// на один товар
-			if (rangeDiscount === 1) {
-				let x = (product.price / 100) * valueDiscount;
-				let x2 = product.price * product.quanty;
-
-				priceProduct = x2 - x;
-				unitPriceProduct = (product.price * product.quanty - x) / product.quanty;
-				discountSum = x;
-			}
-
-			// на каждый товар
-			if (rangeDiscount === 2) {
-				let x = (product.price / 100) * valueDiscount;
-				let x2 = product.quanty * x;
-
-				priceProduct = product.price * product.quanty - x2;
-				unitPriceProduct = product.price - x;
-				discountSum = x * product.quanty;
-			}
-
-			// распределение скидки на всё количество
-			if (rangeDiscount === 3) {
-				let x = (product.price / 100) * valueDiscount;
-
-				priceProduct = (product.price - x) * product.quanty;
-				unitPriceProduct = product.price - x;
-				discountSum = x * product.quanty;
-			}
-		}
-
-		if (discountSum) {
-			dispatch(setProductsDiscount([product.code, discountSum]));
-		}
-
-		setPriceProductTotal(priceProduct);
-		setUnitPriceProduct(Number(unitPriceProduct.toFixed(2)));
-		setDiscountSum(discountSum);
+		setPriceProductTotal(recountResult.priceProduct);
+		setUnitPriceProduct(Number(recountResult.unitPriceProduct.toFixed(2)));
+		setDiscountSum(recountResult.discountSum);
 	}
+
+	// --
 
 	return (
 		<div id={"product-" + product.code} className={styles.product} key={product.code}>
@@ -162,7 +102,7 @@ const ProductListGoods = (props: any) => {
 					{discountSum ? <span>- {discountSum} р.</span> : <img src={Icons.discount} alt="" />}
 				</div>
 
-				<div className={`${styles.productBtn} ${styles.productBtnDel}`} onClick={() => dispatch(del(product.code))}>
+				<div className={`${styles.productBtn} ${styles.productBtnDel}`} onClick={onDelProduct}>
 					<img src={Icons.trash} alt="" />
 				</div>
 			</div>

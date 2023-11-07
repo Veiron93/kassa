@@ -23,11 +23,15 @@ const Price = () => {
 	useEffect(() => {
 		let discount = 0;
 
-		if (productsDiscount.length) {
-			discount = productsDiscount.reduce((sum: number, current: any) => sum + current.sumDiscount, 0);
-		}
+		console.log(productsDiscount);
 
-		setDiscount(discount);
+		// if (productsDiscount.length) {
+		// 	discount = productsDiscount.reduce((sum: number, current: any) => sum + current.value, 0);
+		// }
+
+		//console.log(productsDiscount);
+
+		//setDiscount(discount);
 	}, [productsDiscount]);
 
 	return (

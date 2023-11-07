@@ -5,14 +5,18 @@ import { Discount, Product } from "@/modules/products";
 interface CartState {
 	products: Array<Product> | null;
 	stateAddProducts: boolean;
-	productsDiscount: Array<{
-		productCode: number;
-		sumDiscount: number;
-	}>;
-	totalDiscount: number;
+
+	productsDiscount: any;
+
+	discountAllProducts: {
+		state: boolean;
+		value: number;
+		typeValue: number | null;
+	};
 }
 
 const initialState: CartState = {
+	// список товаров
 	products: [
 		{
 			code: 6953156207295,
@@ -30,10 +34,18 @@ const initialState: CartState = {
 		},
 	],
 
+	// возможность добавить товар (отслеживает на странице событие ввода)
 	stateAddProducts: true,
 
-	productsDiscount: [],
-	totalDiscount: 0,
+	// товары со скидкой
+	productsDiscount: {},
+
+	// данные о скидке на весь заказ
+	discountAllProducts: {
+		state: false,
+		value: 0,
+		typeValue: null,
+	},
 };
 
 export const CartSlice: any = createSlice({
@@ -82,77 +94,102 @@ export const CartSlice: any = createSlice({
 			state.stateAddProducts = action.payload;
 		},
 
+		// addDiscountProduct(state, action) {
+		// 	const productCode = action.payload.code;
+		// 	const discount = action.payload.discount;
+
+		// 	if (state.products) {
+		// 		let product = state.products.find((p) => p.code === productCode);
+
+		// 		if (product) {
+		// 			product.discount = {
+		// 				value: discount.value,
+		// 				typeValue: discount.typeValue,
+		// 				range: discount.range,
+		// 			};
+		// 		}
+		// 	}
+		// },
+
+		// addDiscountAllProducts(state, action) {
+		// 	const discount = action.payload.discount;
+
+		// 	if (state.products) {
+		// 		let productDiscount: Discount = {
+		// 			...discount,
+		// 		};
+
+		// 		let discountValue = 0;
+		// 		let sumPrice = state.products.reduce((sum: number, current: Product) => sum + current.price * current.quanty, 0);
+
+		// 		state.products.forEach((product: Product) => {
+		// 			if (discount.typeValue === 1) {
+		// 				discountValue = product.price * (discount.value / (sumPrice / 100) / 100);
+		// 				productDiscount.value = discountValue;
+		// 			}
+
+		// 			product.discount = {
+		// 				...productDiscount,
+		// 			};
+		// 		});
+		// 	}
+		// },
+
+		// delDiscountProduct(state, action) {
+		// 	const productCode = action.payload;
+
+		// 	if (state.products) {
+		// 		let product = state.products.find((p) => p.code === productCode);
+
+		// 		if (product) {
+		// 			delete product.discount;
+		// 		}
+		// 	}
+		// },
+
+		// setProductsDiscount(state, action) {
+		// 	let productCode = action.payload[0];
+		// 	let discount = action.payload[1];
+
+		// 	let product = null;
+
+		// 	if (state.productsDiscount) {
+		// 		product = state.productsDiscount.find((p) => p.productCode === productCode);
+		// 	}
+
+		// 	if (product) {
+		// 		product.sumDiscount = discount;
+		// 	} else {
+		// 		state.productsDiscount.push({
+		// 			productCode: productCode,
+		// 			sumDiscount: discount,
+		// 		});
+		// 	}
+		// },
+
+		// delProductsDiscount(state, action) {
+		// 	let productCode = action.payload;
+
+		// 	if (productCode) {
+		// 		let productIndex = state.productsDiscount.findIndex((p) => p.productCode === productCode);
+
+		// 		if (productIndex != -1) {
+		// 			state.productsDiscount.splice(productIndex, 1);
+		// 		}
+		// 	}
+		// },
+
 		addDiscountProduct(state, action) {
-			const productCode = action.payload.code;
-			const discount = action.payload.discount;
+			let productCode = action.payload.productCode;
+			let discount = action.payload.discount;
 
-			if (state.products) {
-				let product = state.products.find((p) => p.code === productCode);
-
-				if (product) {
-					product.discount = {
-						value: discount.value,
-						typeValue: discount.typeValue,
-						range: discount.range,
-					};
-				}
-			}
-		},
-
-		addDiscountAllProducts(state, action) {
-			const discount = action.payload.discount;
-
-			if (state.products) {
-				let productDiscount: Discount = {
-					...discount,
-				};
-
-				let discountValue = 0;
-				let sumPrice = state.products.reduce((sum: number, current: Product) => sum + current.price * current.quanty, 0);
-
-				state.products.forEach((product: Product) => {
-					if (discount.typeValue === 1) {
-						discountValue = product.price * (discount.value / (sumPrice / 100) / 100);
-						productDiscount.value = discountValue;
-					}
-
-					product.discount = {
-						...productDiscount,
-					};
-				});
-			}
+			state.productsDiscount[productCode] = discount;
 		},
 
 		delDiscountProduct(state, action) {
-			const productCode = action.payload;
+			let productCode = action.payload.productCode;
 
-			if (state.products) {
-				let product = state.products.find((p) => p.code === productCode);
-
-				if (product) {
-					delete product.discount;
-				}
-			}
-		},
-
-		setProductsDiscount(state, action) {
-			let productCode = action.payload[0];
-			let discount = action.payload[1];
-
-			let product = null;
-
-			if (state.productsDiscount) {
-				product = state.productsDiscount.find((p) => p.productCode === productCode);
-			}
-
-			if (product) {
-				product.sumDiscount = discount;
-			} else {
-				state.productsDiscount.push({
-					productCode: productCode,
-					sumDiscount: discount,
-				});
-			}
+			delete state.productsDiscount[productCode];
 		},
 	},
 });
