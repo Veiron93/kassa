@@ -10,7 +10,7 @@ import styles from "./productsList.module.scss";
 import Product from "@/components/Cart/Product/Product";
 
 const List = () => {
-	// ТЕСТОВЫЕ ДАННЫЕ - старт
+	// ТЕСТОВЫЕ ДАННЫЕ
 	// db products
 	let serverProducts = [
 		{ id: 1, name: "Ремешок Apple Watch", price: 1500, leftover: 2, code: 1323322332 },
@@ -26,11 +26,24 @@ const List = () => {
 		{ id: 2, name: "Скидка 300 руб.", type: "fixed", discount: 300 },
 	];
 
-	// ТЕСТОВЫЕ ДАННЫЕ - конец
+	// --
 
-	const { products, stateAddProducts } = useAppSelector((state: any) => state.CartReducer);
-	const { changeQuanty, add } = CartSlice.actions;
+	// STORE
 	const dispatch = useAppDispatch();
+
+	// state
+	const { products, stateAddProducts, discountCart } = useAppSelector((state: any) => state.CartReducer);
+
+	// actions
+	const { changeQuanty, add, addDiscountCart } = CartSlice.actions;
+
+	// --
+
+	useEffect(() => {
+		if (discountCart) {
+			dispatch(addDiscountCart({ discount: discountCart }));
+		}
+	}, [products]);
 
 	// Отслеживает вставку кода со сканера
 	useEffect(() => {

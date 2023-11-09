@@ -21,7 +21,7 @@ const ProductListGoods = (props: any) => {
 	const dispatch = useAppDispatch();
 
 	// state
-	const { productsDiscount } = useAppSelector((state: any) => state.CartReducer);
+	const { productsDiscount, discountCart } = useAppSelector((state: any) => state.CartReducer);
 
 	// actions
 	const { changeQuanty, del, delDiscountProduct } = CartSlice.actions;
@@ -57,11 +57,7 @@ const ProductListGoods = (props: any) => {
 	const [unitPriceProduct, setUnitPriceProduct] = useState<number>(0);
 	const [discountSum, setDiscountSum] = useState<number>(0);
 
-	//useEffect(onRecountPrice, [product.quanty]);
-
 	useEffect(() => {
-		//console.log(productsDiscount);
-
 		if (productsDiscount[product.code]) {
 			onRecountPrice(productsDiscount[product.code]);
 		} else {
@@ -70,14 +66,11 @@ const ProductListGoods = (props: any) => {
 	}, [product.quanty, productsDiscount]);
 
 	function onRecountPrice(discount = null) {
-		// console.log(product);
-		// console.log(discount);
-
 		const recountResult = priceProduct(product, discount);
 
-		setPriceProductTotal(recountResult.priceProduct);
+		setPriceProductTotal(Number(recountResult.priceProduct.toFixed(2)));
 		setUnitPriceProduct(Number(recountResult.unitPriceProduct.toFixed(2)));
-		setDiscountSum(recountResult.discountSum);
+		setDiscountSum(Number(recountResult.discountSum.toFixed(2)));
 	}
 
 	// --
@@ -103,7 +96,7 @@ const ProductListGoods = (props: any) => {
 			</div>
 
 			<div className={styles.productBtns}>
-				<div className={`${styles.productBtn} ${styles.productBtnDiscount}`} onClick={() => dispatch(showDiscount(product))}>
+				<div className={`${styles.productBtn} ${styles.productBtnDiscount}`} onClick={() => !discountCart && dispatch(showDiscount(product))}>
 					{discountSum ? <span>- {discountSum} р.</span> : <img src={Icons.discount} alt="" />}
 				</div>
 

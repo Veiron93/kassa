@@ -1,6 +1,6 @@
 //store
 import { CartSlice } from "@/store/reducers/CartSlice";
-import { useAppDispatch } from "@/store/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
 import { CartDiscountSlice } from "@/store/reducers/CartDiscountSlice";
 
 import styles from "./Btns.module.scss";
@@ -16,9 +16,14 @@ import ButtonIcon from "@/ui-components/ButtonIcon/ButtonIcon";
 import IconsTrash from "@/assets/img/icons/trash.svg";
 
 const BtnsTrayProducts = () => {
-	const { clearCart } = CartSlice.actions;
+	// STORE
 	const dispatch = useAppDispatch();
 
+	//state
+	const { discountCart } = useAppSelector((state: any) => state.CartReducer);
+
+	//actions
+	const { clearCart } = CartSlice.actions;
 	const { show: showCartDiscount } = CartDiscountSlice.actions;
 
 	return (
@@ -27,7 +32,9 @@ const BtnsTrayProducts = () => {
 				Оплата
 			</Link>
 
-			<Button onClick={() => dispatch(showCartDiscount())}>Скидка</Button>
+			<Button onClick={() => dispatch(showCartDiscount())} className={`${styles.btnDiscount} ${discountCart && styles.active}`}>
+				Скидка
+			</Button>
 			<ButtonIcon className={styles.btnClear} img={IconsTrash} event={() => dispatch(clearCart())}></ButtonIcon>
 		</div>
 	);

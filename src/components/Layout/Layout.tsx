@@ -15,7 +15,7 @@ function Layout() {
 				<Outlet />
 			</div>
 			<div className={styles.layoutSide}>
-				<OfflineModeIndication />
+				{/* <OfflineModeIndication /> */}
 				<Navigation />
 				<CodeProduct />
 			</div>

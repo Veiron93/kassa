@@ -1,8 +1,13 @@
 .trayProductList {
 	//border: 1px solid red;
-	margin-top: auto;
-	padding-top: 20px;
+
 	display: flex;
 	justify-content: space-between;
 	column-gap: 30px;
+
+	height: 80px;
+	margin-top: auto;
+	padding-top: 10px;
+	position: relative;
+	z-index: 2;
 }

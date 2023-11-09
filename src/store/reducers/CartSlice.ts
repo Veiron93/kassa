@@ -102,6 +102,7 @@ export const CartSlice: any = createSlice({
 		addDiscountCart(state, action) {
 			let discount = action.payload.discount;
 
+			state.productsDiscount = {};
 			state.discountCart = discount;
 
 			if (state.products && state.products.length) {

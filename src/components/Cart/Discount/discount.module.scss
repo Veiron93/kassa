@@ -5,11 +5,14 @@
 	bottom: 0;
 	left: 0;
 
+	z-index: 999;
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
-	background: rgba(#000, 0.3);
+	background-color: rgba(#000, 0.6);
+	backdrop-filter: blur(5px);
 
 	&Wrapper {
 		//border: 1px solid red;
@@ -22,12 +25,16 @@
 		.title {
 			font-size: 24px;
 			font-weight: 500;
-			margin-bottom: 20px;
+		}
+
+		.cartDiscountDescription {
+			margin-top: 10px;
 		}
 
 		.sumDiscount {
 			display: flex;
 			column-gap: 20px;
+			margin-top: 20px;
 
 			input {
 				width: 160px;
@@ -44,7 +51,6 @@
 			//align-items: center;
 			column-gap: 20px;
 			margin-top: 20px;
-			margin-bottom: 30px;
 			padding-top: 20px;
 
 			border-top: 1px solid #d5d5d5;
@@ -64,6 +70,7 @@
 		.btns {
 			display: flex;
 			column-gap: 20px;
+			margin-top: 30px;
 
 			> div {
 				&:last-child {

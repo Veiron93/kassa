@@ -34,31 +34,14 @@ const Discount = () => {
 		},
 	];
 
-	const itemsRangeDiscount = [
-		{
-			name: "На один",
-			value: 1,
-		},
-		{
-			name: "На каждый",
-			value: 2,
-		},
-		{
-			name: "Распределить",
-			value: 3,
-		},
-	];
-
 	const discount = {
 		value: "" as number | string,
 		typeValue: itemsTypeValueDiscount[0].value as number,
-		//range: itemsRangeDiscount[2].value as number,
 	};
 
 	if (discountCart) {
 		discount.value = discountCart.value;
 		discount.typeValue = discountCart.typeValue;
-		//discount.range = discountCart.range;
 	}
 
 	const [errorFormDiscount, setErrorFormDiscount] = useState<string | null>(null);
@@ -71,12 +54,6 @@ const Discount = () => {
 
 	function onTypeValueDiscount(value: number | null) {
 		discount.typeValue = Number(value);
-
-		// if (value == 1) {
-		// 	discount.range = itemsRangeDiscount[2].value;
-		// } else if (value == 2) {
-		// 	discount.range = itemsRangeDiscount[1].value;
-		// }
 	}
 
 	function validationFormDiscount(): void | boolean {
@@ -102,6 +79,8 @@ const Discount = () => {
 		<div className={styles.cartDiscount}>
 			<div className={styles.cartDiscountWrapper}>
 				<div className={styles.title}>Скидка</div>
+
+				<div className={styles.cartDiscountDescription}>Скидка распределится между позициями</div>
 
 				<div className={styles.sumDiscount}>
 					<input type="number" placeholder="Скидка" defaultValue={discount.value} onChange={onValueDiscount} />
