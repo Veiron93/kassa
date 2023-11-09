@@ -60,6 +60,8 @@ const ProductListGoods = (props: any) => {
 	//useEffect(onRecountPrice, [product.quanty]);
 
 	useEffect(() => {
+		//console.log(productsDiscount);
+
 		if (productsDiscount[product.code]) {
 			onRecountPrice(productsDiscount[product.code]);
 		} else {
@@ -68,6 +70,9 @@ const ProductListGoods = (props: any) => {
 	}, [product.quanty, productsDiscount]);
 
 	function onRecountPrice(discount = null) {
+		// console.log(product);
+		// console.log(discount);
+
 		const recountResult = priceProduct(product, discount);
 
 		setPriceProductTotal(recountResult.priceProduct);

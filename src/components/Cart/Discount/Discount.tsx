@@ -16,10 +16,10 @@ const Discount = () => {
 	const dispatch = useAppDispatch();
 
 	// state
-	const { products } = useAppSelector((state: any) => state.CartReducer);
+	const { products, discountCart } = useAppSelector((state: any) => state.CartReducer);
 
 	// actions
-	const { onStateAddProducts, addDiscountAllProducts, delDiscount: cartDelDiscount } = CartSlice.actions;
+	const { onStateAddProducts, addDiscountCart, delDiscountCart } = CartSlice.actions;
 	const { hidden: hiddenCartDiscount } = CartDiscountSlice.actions;
 
 	// BUTTON GROUP
@@ -34,11 +34,32 @@ const Discount = () => {
 		},
 	];
 
+	const itemsRangeDiscount = [
+		{
+			name: "На один",
+			value: 1,
+		},
+		{
+			name: "На каждый",
+			value: 2,
+		},
+		{
+			name: "Распределить",
+			value: 3,
+		},
+	];
+
 	const discount = {
 		value: "" as number | string,
 		typeValue: itemsTypeValueDiscount[0].value as number,
-		range: 2,
+		//range: itemsRangeDiscount[2].value as number,
 	};
+
+	if (discountCart) {
+		discount.value = discountCart.value;
+		discount.typeValue = discountCart.typeValue;
+		//discount.range = discountCart.range;
+	}
 
 	const [errorFormDiscount, setErrorFormDiscount] = useState<string | null>(null);
 
@@ -50,6 +71,12 @@ const Discount = () => {
 
 	function onTypeValueDiscount(value: number | null) {
 		discount.typeValue = Number(value);
+
+		// if (value == 1) {
+		// 	discount.range = itemsRangeDiscount[2].value;
+		// } else if (value == 2) {
+		// 	discount.range = itemsRangeDiscount[1].value;
+		// }
 	}
 
 	function validationFormDiscount(): void | boolean {
@@ -57,16 +84,17 @@ const Discount = () => {
 			setErrorFormDiscount("Введите скидку");
 			return false;
 		}
-		addDiscountCart();
+
+		onAddDiscountCart();
 		dispatch(hiddenCartDiscount());
 	}
 
-	function addDiscountCart() {
-		dispatch(addDiscountAllProducts({ discount: discount }));
+	function onAddDiscountCart() {
+		dispatch(addDiscountCart({ discount: discount }));
 	}
 
 	function delCartDiscount() {
-		dispatch(cartDelDiscount());
+		dispatch(delDiscountCart());
 		dispatch(hiddenCartDiscount());
 	}
 

@@ -9,8 +9,6 @@ export function priceProduct(product: Product, discount: Discount | null = null)
 	let typeValueDiscount: number | null = null;
 	let rangeDiscount: number | null = null;
 
-	//const discount = product.discount;
-
 	if (discount) {
 		valueDiscount = discount.value;
 		typeValueDiscount = discount.typeValue;
@@ -88,9 +86,24 @@ export function priceProduct(product: Product, discount: Discount | null = null)
 	};
 }
 
-export function recountPriceProducts(products: Array<Product>) {
-	products.forEach((product) => {
-		//recountPriceProduct(product);
-		//console.log(product);
-	});
+export function getDiscountCart(productsDiscount: any, productCart: Array<Product>): number {
+	let discount = 0;
+
+	if (Object.keys(productsDiscount).length || productCart.length) {
+		productCart.forEach((productCart) => {
+			let code = productCart.code;
+
+			if (!productsDiscount[code]) {
+				return false;
+			}
+
+			let prices = priceProduct(productCart, productsDiscount[code]);
+
+			if (prices.discountSum) {
+				discount += prices.discountSum;
+			}
+		});
+	}
+
+	return discount;
 }

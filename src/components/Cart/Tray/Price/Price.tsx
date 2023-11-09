@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 
 import styles from "./Price.module.scss";
 
+import { getDiscountCart } from "@/helpers/cart";
+
 //store
-import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
+import { useAppSelector } from "@/store/hooks/redux";
 
 const Price = () => {
 	// state
@@ -21,17 +23,7 @@ const Price = () => {
 
 	// скидка
 	useEffect(() => {
-		let discount = 0;
-
-		console.log(productsDiscount);
-
-		// if (productsDiscount.length) {
-		// 	discount = productsDiscount.reduce((sum: number, current: any) => sum + current.value, 0);
-		// }
-
-		//console.log(productsDiscount);
-
-		//setDiscount(discount);
+		setDiscount(getDiscountCart(productsDiscount, products));
 	}, [productsDiscount]);
 
 	return (

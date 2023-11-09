@@ -8,11 +8,7 @@ interface CartState {
 
 	productsDiscount: any;
 
-	discountAllProducts: {
-		state: boolean;
-		value: number;
-		typeValue: number | null;
-	};
+	discountCart: Discount | null;
 }
 
 const initialState: CartState = {
@@ -41,11 +37,7 @@ const initialState: CartState = {
 	productsDiscount: {},
 
 	// данные о скидке на весь заказ
-	discountAllProducts: {
-		state: false,
-		value: 0,
-		typeValue: null,
-	},
+	discountCart: null,
 };
 
 export const CartSlice: any = createSlice({
@@ -86,98 +78,13 @@ export const CartSlice: any = createSlice({
 		},
 
 		// очистить список
-		clearList(state) {
+		clearCart(state) {
 			state.products = [];
 		},
 
 		onStateAddProducts(state, action) {
 			state.stateAddProducts = action.payload;
 		},
-
-		// addDiscountProduct(state, action) {
-		// 	const productCode = action.payload.code;
-		// 	const discount = action.payload.discount;
-
-		// 	if (state.products) {
-		// 		let product = state.products.find((p) => p.code === productCode);
-
-		// 		if (product) {
-		// 			product.discount = {
-		// 				value: discount.value,
-		// 				typeValue: discount.typeValue,
-		// 				range: discount.range,
-		// 			};
-		// 		}
-		// 	}
-		// },
-
-		// addDiscountAllProducts(state, action) {
-		// 	const discount = action.payload.discount;
-
-		// 	if (state.products) {
-		// 		let productDiscount: Discount = {
-		// 			...discount,
-		// 		};
-
-		// 		let discountValue = 0;
-		// 		let sumPrice = state.products.reduce((sum: number, current: Product) => sum + current.price * current.quanty, 0);
-
-		// 		state.products.forEach((product: Product) => {
-		// 			if (discount.typeValue === 1) {
-		// 				discountValue = product.price * (discount.value / (sumPrice / 100) / 100);
-		// 				productDiscount.value = discountValue;
-		// 			}
-
-		// 			product.discount = {
-		// 				...productDiscount,
-		// 			};
-		// 		});
-		// 	}
-		// },
-
-		// delDiscountProduct(state, action) {
-		// 	const productCode = action.payload;
-
-		// 	if (state.products) {
-		// 		let product = state.products.find((p) => p.code === productCode);
-
-		// 		if (product) {
-		// 			delete product.discount;
-		// 		}
-		// 	}
-		// },
-
-		// setProductsDiscount(state, action) {
-		// 	let productCode = action.payload[0];
-		// 	let discount = action.payload[1];
-
-		// 	let product = null;
-
-		// 	if (state.productsDiscount) {
-		// 		product = state.productsDiscount.find((p) => p.productCode === productCode);
-		// 	}
-
-		// 	if (product) {
-		// 		product.sumDiscount = discount;
-		// 	} else {
-		// 		state.productsDiscount.push({
-		// 			productCode: productCode,
-		// 			sumDiscount: discount,
-		// 		});
-		// 	}
-		// },
-
-		// delProductsDiscount(state, action) {
-		// 	let productCode = action.payload;
-
-		// 	if (productCode) {
-		// 		let productIndex = state.productsDiscount.findIndex((p) => p.productCode === productCode);
-
-		// 		if (productIndex != -1) {
-		// 			state.productsDiscount.splice(productIndex, 1);
-		// 		}
-		// 	}
-		// },
 
 		addDiscountProduct(state, action) {
 			let productCode = action.payload.productCode;
@@ -190,6 +97,41 @@ export const CartSlice: any = createSlice({
 			let productCode = action.payload.productCode;
 
 			delete state.productsDiscount[productCode];
+		},
+
+		addDiscountCart(state, action) {
+			let discount = action.payload.discount;
+
+			state.discountCart = discount;
+
+			if (state.products && state.products.length) {
+				let discountUnit = 0;
+				let discountRange = 2;
+
+				// рубли
+				if (discount.typeValue === 1) {
+					const quantyProducts = state.products.reduce((sum, current) => sum + current.quanty, 0);
+					discountUnit = discount.value / quantyProducts;
+				}
+
+				// проценты
+				if (discount.typeValue === 2) {
+					discountUnit = discount.value;
+				}
+
+				state.products.forEach((product) => {
+					state.productsDiscount[product.code] = {
+						value: discountUnit,
+						typeValue: discount.typeValue,
+						range: discountRange,
+					};
+				});
+			}
+		},
+
+		delDiscountCart(state) {
+			state.discountCart = null;
+			state.productsDiscount = {};
 		},
 	},
 });
