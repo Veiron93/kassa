@@ -10,8 +10,6 @@ import { setupStore } from "./store/store";
 import "./assets/scss/main.scss";
 
 function App() {
-	//console.log(router);
-
 	const store = setupStore();
 
 	return (

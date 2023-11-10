@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { priceProduct } from "@/helpers/cart";
 
-import { Product } from "@/modules/products";
+import { Product } from "@/models/products";
 
 import styles from "./product.module.scss";
 

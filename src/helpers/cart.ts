@@ -1,4 +1,4 @@
-import { Product, Discount } from "@/modules/products";
+import { Product, Discount } from "@/models/products";
 
 export function priceProduct(product: Product, discount: Discount | null = null) {
 	let priceProduct: number = 0;

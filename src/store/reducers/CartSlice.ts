@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { Discount, Product } from "@/modules/products";
+import { Discount, Product } from "@/models/products";
 
 interface CartState {
 	products: Array<Product> | null;
