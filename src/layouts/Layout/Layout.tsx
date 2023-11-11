@@ -1,0 +1,53 @@
+import { Outlet, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+
+import styles from "./Layout.module.scss";
+
+// services
+import { getUser } from "@/services/users";
+
+//store
+import { useAppDispatch } from "@/store/hooks/redux";
+import { UsersSlice } from "@/store/reducers/UsersSlice";
+
+// components
+import AboutCart from "@/components/AboutCart/AboutCart";
+import Navigation from "@/components/Navigation/Navigation";
+import CodeProduct from "@/components/CodeProduct/CodeProduct";
+
+function Layout() {
+	// let location = useLocation();
+
+	// useEffect(() => {
+	// 	console.log(777);
+	// }, [location]);
+
+	// STORE
+	const dispatch = useAppDispatch();
+
+	// actions
+	const { setUser } = UsersSlice.actions;
+
+	useEffect(() => {
+		const userAuth = localStorage.getItem("user");
+
+		getUser(userAuth).then((response) => {
+			dispatch(setUser(response));
+		});
+	});
+
+	return (
+		<main className={styles.layout}>
+			<div className={styles.layoutContent}>
+				<Outlet />
+			</div>
+			<div className={styles.layoutSide}>
+				<AboutCart />
+				<Navigation />
+				<CodeProduct />
+			</div>
+		</main>
+	);
+}
+
+export default Layout;

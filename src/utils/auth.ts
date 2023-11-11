@@ -1,18 +1,20 @@
 //services
-import { getKassa } from "@/services/kassa";
-import { getUser } from "@/services/users";
+import { kassaIsActive } from "@/services/kassa";
+import { userIsActive } from "@/services/users";
 
 export function isActive(type: string) {
 	return new Promise((resolve) => {
-		let token = localStorage.getItem(type + "Token");
+		let data = localStorage.getItem(type);
 		let onGetIsActive = null;
 
-		if (token) {
-			if (type === "kassa") onGetIsActive = getKassa(token);
-			if (type === "user") onGetIsActive = getUser(token);
+		if (data) {
+			let dataJSON = JSON.parse(data);
+
+			if (type === "kassa") onGetIsActive = kassaIsActive(dataJSON.token);
+			if (type === "user") onGetIsActive = userIsActive(dataJSON.token);
 
 			if (onGetIsActive) {
-				onGetIsActive.then((response: any) => resolve(response.isActive));
+				onGetIsActive.then((response: any) => resolve(response));
 			}
 		} else {
 			resolve(false);

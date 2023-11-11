@@ -4,7 +4,7 @@ import { redirect } from "react-router-dom";
 import { isActive } from "@/utils/auth";
 
 // components
-import Layout from "../components/Layout/Layout";
+import Layout from "../layouts/Layout/Layout";
 
 // pages
 import Index from "../pages/Index/Index";
@@ -29,7 +29,7 @@ const app = [
 				if (!response) throw redirect("/auth/user");
 			});
 
-			return false;
+			return true;
 		},
 
 		children: [

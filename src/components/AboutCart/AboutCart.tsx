@@ -2,6 +2,9 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./AboutCart.module.scss";
 
+//store
+import { useAppSelector } from "@/store/hooks/redux";
+
 // components
 import StatusCart from "@/components/AboutCart/StatusCart/StatusCart";
 
@@ -11,10 +14,11 @@ import Icons from "@/ui-components/Icons/Icons";
 const AboutCart = () => {
 	const navigate = useNavigate();
 
-	let user = "Клюквина Анна";
+	// state
+	const { user } = useAppSelector((state: any) => state.UsersReducer);
 
 	function logOut() {
-		localStorage.removeItem("userToken");
+		localStorage.removeItem("user");
 		navigate("/auth/user");
 	}
 
@@ -22,7 +26,7 @@ const AboutCart = () => {
 		<div className={styles.aboutCart}>
 			<div className={styles.sectionInfo}>
 				<StatusCart />
-				<div className={styles.user}>{user}</div>
+				{user && user.name && <div className={styles.user}>{user.name}</div>}
 			</div>
 
 			<div className={styles.logOut} onClick={logOut}>

@@ -1,7 +1,5 @@
-export function getKassa(token: string) {
+export function kassaIsActive(token: string) {
 	return new Promise((resolve) => {
-		resolve({
-			isActive: true,
-		});
+		resolve(true);
 	});
 }

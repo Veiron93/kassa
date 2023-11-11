@@ -1,5 +1,5 @@
 .userAuthorization {
-	border: 1px solid red;
+	//border: 1px solid red;
 	width: 400px;
 
 	&_title {
@@ -9,12 +9,13 @@
 
 	&_usersList {
 		margin-top: 20px;
-		border: 1px solid red;
+		//border: 1px solid red;
 
 		.user {
-			border: 1px solid red;
-			padding: 5px;
+			//border: 1px solid red;
+			padding: 12px 15px;
 			cursor: pointer;
+			background: #e5e5e5;
 
 			&:not(:last-child) {
 				margin-bottom: 10px;

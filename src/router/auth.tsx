@@ -4,7 +4,7 @@ import { redirect } from "react-router-dom";
 import { isActive } from "@/utils/auth";
 
 // components
-import LayoutAuth from "@/components/LayoutAuth/LayoutAuth";
+import LayoutAuth from "@/layouts/LayoutAuth/LayoutAuth";
 
 // views
 import KassaAuthorization from "@/pages/Auth/KassaAuthorization/KassaAuthorization";

@@ -1,15 +1,19 @@
-export function getUser(token: string) {
+import UsersData from "@/data/users";
+
+export function userIsActive(token: string) {
 	return new Promise((resolve) => {
-		resolve({
-			isActive: true,
-		});
+		resolve(true);
 	});
 }
 
-export function userLogIn(id: number) {
-	const response = {
-		data: true,
-	};
+export function userLogIn(id: string, password: string) {
+	return new Promise((resolve) => {
+		resolve(UsersData.user);
+	});
+}
 
-	return response;
+export function getUser(userAuth: any) {
+	return new Promise((resolve) => {
+		resolve(UsersData.user);
+	});
 }

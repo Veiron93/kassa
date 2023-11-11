@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import styles from "./userAuthorization.module.scss";
 
 // data
-import users from "@/data/users";
+import usersData from "@/data/users";
 
 // services
 import { userLogIn } from "@/services/users";
@@ -17,8 +17,6 @@ import { UsersSlice } from "@/store/reducers/UsersSlice";
 import Button from "@/ui-components/Button/Button";
 
 const UserAuthorization = () => {
-	const [error, setError] = useState<string | null>(null);
-
 	// STORE
 	const dispatch = useAppDispatch();
 
@@ -36,34 +34,57 @@ const UserAuthorization = () => {
 	// --
 
 	const [stateForm, setStateForm] = useState<boolean>(false);
-	const [selectedUserId, setSelectedUserId] = useState<null | number>(null);
+	const [error, setError] = useState<string | null>(null);
 
-	function onSelectUser(id: number) {
+	const [selectedUserId, setSelectedUserId] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
+
+	function onSelectUser(id: string) {
 		setSelectedUserId(id);
 		setStateForm(true);
 	}
 
 	function cancel() {
-		setSelectedUserId(null);
+		setSelectedUserId("");
 		setStateForm(false);
 	}
 
-	function onUserAuth() {
-		if (selectedUserId) {
-			// 0
-			const result = userLogIn(selectedUserId);
+	function validationUserAuth() {
+		setPassword(password.trim());
 
-			// 1
-			localStorage.setItem("userToken", JSON.stringify(selectedUserId));
-
-			// 2
-			//dispatch(setUserStore(selectedUserId, "121212122112"));
-
-			// 3
-			navigation("/");
-		} else {
-			setError("ошибка");
+		if (!selectedUserId) {
+			setError("Выберите пользователя");
+			return;
 		}
+
+		if (password.length === 0) {
+			setError("Введите ПИН-код");
+			return;
+		}
+
+		if (password.length > 0 && password.length < 4) {
+			setError("Введите корректный ПИН-код");
+			return;
+		}
+
+		onUserAuth();
+	}
+
+	function onUserAuth() {
+		// 0
+		userLogIn(selectedUserId, password).then((response: any) => {
+			if (response) {
+				const user = {
+					id: response.id,
+					token: response.token,
+				};
+
+				localStorage.setItem("user", JSON.stringify(user));
+				navigation("/");
+			} else {
+				setError("Ошибка");
+			}
+		});
 	}
 
 	return (
@@ -71,7 +92,7 @@ const UserAuthorization = () => {
 			<div className={styles.userAuthorization_title}>Выберите пользователя</div>
 
 			<div className={styles.userAuthorization_usersList}>
-				{users.map((user) => (
+				{usersData.users.map((user) => (
 					<div
 						className={`${styles.user} ${selectedUserId === user.id ? styles.active : ""}`}
 						key={user.id}
@@ -86,17 +107,17 @@ const UserAuthorization = () => {
 				<div className={styles.userAuthorization_form}>
 					<label>
 						<span>Введите ПИН-код</span>
-						<input type="text" maxLength={4} />
+						<input type="password" maxLength={4} value={password} onChange={(e) => setPassword(e.target.value)} />
 					</label>
 
-					{error && <div className="error">{error}</div>}
-
 					<div className={styles.btns}>
-						<Button onClick={onUserAuth}>ОК</Button>
+						<Button onClick={validationUserAuth}>ОК</Button>
 						<Button onClick={cancel}>Отмена</Button>
 					</div>
 				</div>
 			)}
+
+			{error && <div className="error">{error}</div>}
 		</div>
 	);
 };

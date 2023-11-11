@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./kassaAuthorization.module.scss";
 
 // services
-import { getKassa } from "@/services/kassa";
+import { kassaIsActive } from "@/services/kassa";
 import { useEffect, useState } from "react";
 
 const KassaAuthorization = () => {
@@ -31,12 +31,16 @@ const KassaAuthorization = () => {
 	}
 
 	function onLogInKassa() {
-		getKassa(tokenKassa).then((response) => {
+		kassaIsActive(tokenKassa).then((response: any) => {
 			if (response) {
-				localStorage.setItem("kassaToken", tokenKassa);
+				const kassa = {
+					token: tokenKassa,
+				};
+
+				localStorage.setItem("kassa", JSON.stringify(kassa));
 				navigation("/auth/user");
 			} else {
-				setError("ошибка");
+				setError("Ошибка");
 			}
 		});
 	}
