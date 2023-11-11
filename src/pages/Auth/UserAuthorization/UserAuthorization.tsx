@@ -1,5 +1,3 @@
-import { redirect } from "react-router-dom";
-
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -7,9 +5,6 @@ import styles from "./userAuthorization.module.scss";
 
 // data
 import users from "@/data/users";
-
-// hooks
-//import { useSetLocalStorage } from "@/hooks/useSetLocalStorage";
 
 // services
 import { userLogIn } from "@/services/users";
@@ -22,6 +17,8 @@ import { UsersSlice } from "@/store/reducers/UsersSlice";
 import Button from "@/ui-components/Button/Button";
 
 const UserAuthorization = () => {
+	const [error, setError] = useState<string | null>(null);
+
 	// STORE
 	const dispatch = useAppDispatch();
 
@@ -37,14 +34,6 @@ const UserAuthorization = () => {
 	const navigation = useNavigate();
 
 	// --
-
-	// const tokenKassa = localStorage.getItem("tokenKassa");
-
-	// useEffect(() => {
-	// 	if (!tokenKassa) {
-	// 		navigation("/");
-	// 	}
-	// });
 
 	const [stateForm, setStateForm] = useState<boolean>(false);
 	const [selectedUserId, setSelectedUserId] = useState<null | number>(null);
@@ -65,13 +54,15 @@ const UserAuthorization = () => {
 			const result = userLogIn(selectedUserId);
 
 			// 1
-			localStorage.setItem("userIdKassa", JSON.stringify(selectedUserId));
+			localStorage.setItem("userToken", JSON.stringify(selectedUserId));
 
 			// 2
 			//dispatch(setUserStore(selectedUserId, "121212122112"));
 
 			// 3
 			navigation("/");
+		} else {
+			setError("ошибка");
 		}
 	}
 
@@ -97,6 +88,8 @@ const UserAuthorization = () => {
 						<span>Введите ПИН-код</span>
 						<input type="text" maxLength={4} />
 					</label>
+
+					{error && <div className="error">{error}</div>}
 
 					<div className={styles.btns}>
 						<Button onClick={onUserAuth}>ОК</Button>

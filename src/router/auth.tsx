@@ -1,5 +1,8 @@
 import { redirect } from "react-router-dom";
 
+// utils
+import { isActive } from "@/utils/auth";
+
 // components
 import LayoutAuth from "@/components/LayoutAuth/LayoutAuth";
 
@@ -16,12 +19,11 @@ const auth = [
 			{
 				path: "/auth",
 				element: <KassaAuthorization />,
-				loader: () => {
-					const tokenKassa = localStorage.getItem("kassaToken");
-
-					if (tokenKassa) {
-						throw redirect("/auth/user");
-					}
+				loader: async () => {
+					// kassa
+					await isActive("kassa").then((response) => {
+						if (response) throw redirect("/auth/user");
+					});
 
 					return true;
 				},
@@ -30,17 +32,16 @@ const auth = [
 			{
 				path: "user",
 				element: <UserAuthorization />,
-				loader: () => {
-					const tokenKassa = localStorage.getItem("kassaToken");
-					const userIdKassa = localStorage.getItem("userIdKassa");
+				loader: async () => {
+					// kassa
+					await isActive("kassa").then((response) => {
+						if (!response) throw redirect("/auth");
+					});
 
-					if (!tokenKassa) {
-						throw redirect("/auth");
-					}
-
-					if (tokenKassa && userIdKassa) {
-						throw redirect("/");
-					}
+					// kassa
+					await isActive("user").then((response) => {
+						if (response) throw redirect("/");
+					});
 
 					return true;
 				},

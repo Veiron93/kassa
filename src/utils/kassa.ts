@@ -1,3 +1,1 @@
-export function getTokenKassaLocalStorage() {
-	return localStorage.getItem("tokenKassa");
-}
+export function _() {}

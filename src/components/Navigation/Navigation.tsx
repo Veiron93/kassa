@@ -13,7 +13,7 @@ const Navigation = () => {
 	}
 
 	const navItems: navItem[] = [
-		{ name: "Главная", to: "/", classStyle: "navItemIndex" },
+		{ name: "Продажа", to: "/", classStyle: "navItemIndex" },
 		{ name: "Товары", to: "products", classStyle: "navItemProducts" },
 		{ name: "Возврат", to: "return-product", classStyle: "navItemAboutReturnProduct" },
 		{ name: "История", to: "history", classStyle: "navItemHistory" },

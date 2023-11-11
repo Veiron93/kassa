@@ -1,1 +1,1 @@
-export function getUser() {}
+export function _() {}

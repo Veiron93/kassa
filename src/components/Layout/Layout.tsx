@@ -4,9 +4,10 @@ import styles from "./Layout.module.scss";
 
 // components
 //import SelectedProducts from "./../../components/SelectedProducts/SelectedProducts";
-import OfflineModeIndication from "./../../components/OfflineModeIndication/OfflineModeIndication";
-import Navigation from "./../../components/Navigation/Navigation";
-import CodeProduct from "./../../components/CodeProduct/CodeProduct";
+import OfflineModeIndication from "@/components/OfflineModeIndication/OfflineModeIndication";
+import AboutCart from "@/components/AboutCart/AboutCart";
+import Navigation from "@/components/Navigation/Navigation";
+import CodeProduct from "@/components/CodeProduct/CodeProduct";
 
 function Layout() {
 	return (
@@ -16,6 +17,7 @@ function Layout() {
 			</div>
 			<div className={styles.layoutSide}>
 				{/* <OfflineModeIndication /> */}
+				<AboutCart />
 				<Navigation />
 				<CodeProduct />
 			</div>

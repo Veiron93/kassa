@@ -12,10 +12,8 @@ export const CartDiscountSlice: any = createSlice({
 	name: "cartDiscount",
 	initialState,
 	reducers: {
-		show(state, action) {
-			//console.log(action.payload);
+		show(state) {
 			state.state = true;
-			//state.product = action.payload;
 		},
 
 		hidden(state) {

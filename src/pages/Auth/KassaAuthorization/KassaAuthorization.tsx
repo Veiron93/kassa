@@ -4,29 +4,36 @@ import styles from "./kassaAuthorization.module.scss";
 
 // services
 import { getKassa } from "@/services/kassa";
-import { useState } from "react";
-
-// hooks
-//import { useSetLocalStorage } from "@/hooks/useSetLocalStorage";
-
-// hooks
-//import { useTest } from "@/hooks/useTest";
+import { useEffect, useState } from "react";
 
 const KassaAuthorization = () => {
 	const navigation = useNavigate();
 
+	const [tokenKassa, setTokenKassa] = useState<string>("");
 	const [error, setError] = useState<string | null>(null);
 
+	//useEffect(() => console.log(tokenKassa), [tokenKassa]);
+
 	function validationTokenKassa() {
+		setTokenKassa(tokenKassa.trim());
+
+		if (tokenKassa.length === 0) {
+			setError("Введите ключ кассы");
+			return;
+		}
+
+		if (tokenKassa.length < 16 && tokenKassa.length) {
+			setError("Введите корректный ключ кассы");
+			return;
+		}
+
 		onLogInKassa();
 	}
 
 	function onLogInKassa() {
-		// тут проверяем токен кассы, если всё ок, то записываем в локал и неперенапрвляем на следующий шаг
-
-		getKassa("fwefwefwewe").then((response) => {
+		getKassa(tokenKassa).then((response) => {
 			if (response) {
-				localStorage.setItem("kassaToken", JSON.stringify(122121212));
+				localStorage.setItem("kassaToken", tokenKassa);
 				navigation("/auth/user");
 			} else {
 				setError("ошибка");
@@ -37,9 +44,10 @@ const KassaAuthorization = () => {
 	return (
 		<div className={styles.kassaAuthorization}>
 			<div className={styles.kassaAuthorization_title}>Авторизация кассы</div>
+			<span>123456765478fr33kt54</span>
 			<div className={styles.kassaAuthorization_description}>Введите авторизационный ключ</div>
 			<div className={styles.kassaAuthorization_form}>
-				<input type="text" maxLength={16} />
+				<input type="text" maxLength={16} value={tokenKassa} onChange={(e) => setTokenKassa(e.target.value)} />
 				<button onClick={validationTokenKassa}>Ок</button>
 			</div>
 

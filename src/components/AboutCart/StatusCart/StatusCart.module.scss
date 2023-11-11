@@ -1,0 +1,30 @@
+@import "@/assets/scss/vars";
+
+.statusCart {
+	display: flex;
+	align-items: center;
+
+	&Title {
+		margin-right: 8px;
+	}
+
+	&Indicator {
+		height: 14px;
+		width: 14px;
+		background: #000;
+		border-radius: 50%;
+		margin-right: 6px;
+
+		&.online {
+			background: green;
+		}
+
+		&.offline {
+			background: red;
+		}
+	}
+
+	&Text {
+		//ine-height: 1em;
+	}
+}
