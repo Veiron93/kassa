@@ -14,7 +14,7 @@ const Navigation = () => {
 
 	const navItems: navItem[] = [
 		{ name: "Продажа", to: "/", classStyle: "navItemIndex" },
-		{ name: "Товары", to: "products", classStyle: "navItemProducts" },
+		// { name: "Товары", to: "products", classStyle: "navItemProducts" },
 		{ name: "Возврат", to: "return-product", classStyle: "navItemAboutReturnProduct" },
 		{ name: "История", to: "history", classStyle: "navItemHistory" },
 		{ name: "О товаре", to: "about-product", classStyle: "navItemAboutProduct" },

@@ -3,49 +3,65 @@
 .selectedProducts {
 	margin-top: 40px;
 
-	.selectedProductsList {
+	&TopList {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	&BtnAllProducts {
+		border: 1px solid red;
 		display: flex;
-		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		height: 40px;
+		cursor: pointer;
+	}
 
-		.selectedProduct {
-			width: calc(100%/3);
-			height: 90px;
-			padding: 5px;
+	&All {
+		border: 1px solid red;
 
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-
-			background: #e2e2e2;
-			cursor: pointer;
-			transition: background 0.2s;
-			user-select: none;
-
-			&:nth-child(2n+1){
-				background: #f2f2f2;
-			}
-
-			&:hover {
-				
-			}
-
-			&:active{
-				background: $color_main;
-			}
-
-			.selectedProductPrice {
-				font-size: 20px;
-				font-weight: bold;
-				margin-bottom: 5px;
-				line-height: 1em;
-			}
-
-			.selectedProductName {
-				font-size: 15px;
-				line-height: 1.1em;
-				text-align: center;
-			}
+		.listProducts {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
 		}
+	}
+}
+
+.selectedProduct {
+	height: 82px;
+	padding: 5px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	background: #e2e2e2;
+	cursor: pointer;
+	transition: background 0.2s;
+	user-select: none;
+
+	border: 1px solid red;
+
+	&:nth-child(2n + 1) {
+		//background: #d0c8c8;
+	}
+
+	&:hover {
+	}
+
+	&:active {
+		background: $color_main;
+	}
+
+	.selectedProductName {
+		line-height: 1.3em;
+		text-align: center;
+		font-weight: 500;
+	}
+
+	.selectedProductPrice {
+		margin-top: 5px;
+		line-height: 1em;
 	}
 }

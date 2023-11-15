@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 
 import styles from "./Layout.module.scss";
@@ -14,14 +14,9 @@ import { UsersSlice } from "@/store/reducers/UsersSlice";
 import AboutCart from "@/components/AboutCart/AboutCart";
 import Navigation from "@/components/Navigation/Navigation";
 import CodeProduct from "@/components/CodeProduct/CodeProduct";
+import SelectedProducts from "@/components/SelectedProducts/SelectedProducts";
 
 function Layout() {
-	// let location = useLocation();
-
-	// useEffect(() => {
-	// 	console.log(777);
-	// }, [location]);
-
 	// STORE
 	const dispatch = useAppDispatch();
 
@@ -44,6 +39,7 @@ function Layout() {
 			<div className={styles.layoutSide}>
 				<AboutCart />
 				<Navigation />
+				<SelectedProducts />
 				<CodeProduct />
 			</div>
 		</main>

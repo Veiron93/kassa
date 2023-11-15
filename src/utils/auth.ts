@@ -11,7 +11,7 @@ export function isActive(type: string) {
 			let dataJSON = JSON.parse(data);
 
 			if (type === "kassa") onGetIsActive = kassaIsActive(dataJSON.token);
-			if (type === "user") onGetIsActive = userIsActive(dataJSON.token);
+			if (type === "user") onGetIsActive = userIsActive(dataJSON);
 
 			if (onGetIsActive) {
 				onGetIsActive.then((response: any) => resolve(response));

@@ -15,14 +15,14 @@ const initialState: CartState = {
 	// список товаров
 	products: [
 		{
-			code: 6953156207295,
+			code: "6953156207295",
 			name: "Адаптер питания Baseus 30w (чёрный)",
 			price: 700,
 			leftover: 10,
 			quanty: 2,
 		},
 		{
-			code: 6932172606909,
+			code: "6932172606909",
 			name: "Адаптер питания Baseus 10.5w (чёрный)",
 			price: 1200,
 			leftover: 12,

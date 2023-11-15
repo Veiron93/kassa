@@ -125,7 +125,11 @@ const ProductDiscount = () => {
 					<div className={styles.btns}>
 						<Button onClick={validationFormDiscount}>ОК</Button>
 						<Button onClick={() => dispatch(hiddenDiscount())}>Отмена</Button>
-						<Button onClick={onDelDiscount}>Удалить</Button>
+						{discount.value && (
+							<Button className={styles.delDiscount} onClick={onDelDiscount}>
+								Удалить
+							</Button>
+						)}
 					</div>
 				</div>
 			</div>

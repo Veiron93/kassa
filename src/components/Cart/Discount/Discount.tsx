@@ -98,9 +98,17 @@ const Discount = () => {
 				{errorFormDiscount && <div className={styles.error}>{errorFormDiscount}</div>}
 
 				<div className={styles.btns}>
-					<Button onClick={validationFormDiscount}>ОК</Button>
-					<Button onClick={() => dispatch(hiddenCartDiscount())}>Отмена</Button>
-					<Button onClick={delCartDiscount}>Удалить</Button>
+					<Button className={styles.okDiscount} onClick={validationFormDiscount}>
+						ОК
+					</Button>
+					<Button className={styles.cancelDiscount} onClick={() => dispatch(hiddenCartDiscount())}>
+						Отмена
+					</Button>
+					{discount.value && (
+						<Button className={styles.delDiscount} onClick={delCartDiscount}>
+							Удалить
+						</Button>
+					)}
 				</div>
 			</div>
 		</div>

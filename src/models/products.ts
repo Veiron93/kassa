@@ -5,7 +5,7 @@ export interface Discount {
 }
 
 export interface Product {
-	code: number;
+	code: string;
 	name: string;
 	price: number;
 	leftover: number;

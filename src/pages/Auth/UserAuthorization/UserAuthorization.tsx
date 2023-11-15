@@ -4,10 +4,13 @@ import { useState, useEffect } from "react";
 import styles from "./userAuthorization.module.scss";
 
 // data
-import usersData from "@/data/users";
+//import usersData from "@/data/users";
 
 // services
-import { userLogIn } from "@/services/users";
+import { userLogIn, getUsers } from "@/services/users";
+
+// models
+import { User } from "@/models/users";
 
 // store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
@@ -24,7 +27,7 @@ const UserAuthorization = () => {
 	//const { products } = useAppSelector((state: any) => state.UsersReducer);
 
 	// actions
-	const { setUser: setUserStore } = UsersSlice.actions;
+	//const { setUser: setUserStore } = UsersSlice.actions;
 
 	// --
 
@@ -36,8 +39,22 @@ const UserAuthorization = () => {
 	const [stateForm, setStateForm] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
+	const [users, setUsers] = useState<Array<User>>([]);
 	const [selectedUserId, setSelectedUserId] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
+
+	useEffect(() => {
+		const dataKassa: any = localStorage.getItem("kassa");
+		const dataKassaJSON = JSON.parse(dataKassa);
+
+		if (dataKassaJSON.token) {
+			getUsers(dataKassaJSON.token).then((response: any) => {
+				if (response) {
+					setUsers(response);
+				}
+			});
+		}
+	}, []);
 
 	function onSelectUser(id: string) {
 		setSelectedUserId(id);
@@ -91,17 +108,19 @@ const UserAuthorization = () => {
 		<div className={styles.userAuthorization}>
 			<div className={styles.userAuthorization_title}>Выберите пользователя</div>
 
-			<div className={styles.userAuthorization_usersList}>
-				{usersData.users.map((user) => (
-					<div
-						className={`${styles.user} ${selectedUserId === user.id ? styles.active : ""}`}
-						key={user.id}
-						onClick={() => onSelectUser(user.id)}
-					>
-						{user.name}
-					</div>
-				))}
-			</div>
+			{users && users.length > 0 && (
+				<div className={styles.userAuthorization_usersList}>
+					{users.map((user) => (
+						<div
+							className={`${styles.user} ${selectedUserId === user.id ? styles.active : ""}`}
+							key={user.id}
+							onClick={() => onSelectUser(user.id)}
+						>
+							{user.name}
+						</div>
+					))}
+				</div>
+			)}
 
 			{stateForm && (
 				<div className={styles.userAuthorization_form}>
