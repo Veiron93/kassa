@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 
+import styles from "./product.module.scss";
+
+// helpers
 import { priceProduct } from "@/helpers/cart";
 
+// models
 import { Product } from "@/models/products";
-
-import styles from "./product.module.scss";
 
 //store
 import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
 import { CartSlice } from "@/store/reducers/CartSlice";
 import { ProductDiscountSlice } from "@/store/reducers/ProductDiscountSlice";
+
+// componetns
+import Quanty from "@/components/Quanty/Quanty";
 
 // ui-components
 import Icons from "@/ui-components/Icons/Icons";
@@ -26,22 +31,12 @@ const ProductListGoods = (props: any) => {
 	// actions
 	const { changeQuanty, del, delDiscountProduct } = CartSlice.actions;
 	const { show: showDiscount } = ProductDiscountSlice.actions;
-
 	// --
 
 	// COUNT PRODUCT
-	function changeQuantyProduct(type: string) {
-		let quanty: number | null = null;
-
-		if (type === "minus") quanty = -1;
-		if (type === "plus") quanty = 1;
-
-		// if (type === "manual") {
-		// }
-
-		dispatch(changeQuanty({ code: product.code, quanty: quanty, type: type }));
+	function handlerQuanty(value: number) {
+		dispatch(changeQuanty({ code: product.code, quanty: Number(value) }));
 	}
-
 	// --
 
 	// DELETE PRODUCT
@@ -49,7 +44,6 @@ const ProductListGoods = (props: any) => {
 		dispatch(del(product.code));
 		dispatch(delDiscountProduct({ productCode: product.code }));
 	}
-
 	// --
 
 	// PRICE
@@ -72,7 +66,6 @@ const ProductListGoods = (props: any) => {
 		setUnitPriceProduct(Number(recountResult.unitPriceProduct.toFixed(2)));
 		setDiscountSum(Number(recountResult.discountSum.toFixed(2)));
 	}
-
 	// --
 
 	return (
@@ -84,11 +77,7 @@ const ProductListGoods = (props: any) => {
 				</span>
 			</div>
 
-			<div className={styles.productCount}>
-				<button onClick={() => changeQuantyProduct("minus")}>-</button>
-				<div className={styles.productCountPreview}>{product.quanty}</div>
-				<button onClick={() => changeQuantyProduct("plus")}>+</button>
-			</div>
+			<Quanty value={product.quanty} max={product.leftover} onChange={handlerQuanty} />
 
 			<div className={styles.productPrice}>
 				<div className={styles.productPrice__total}>{priceProductTotal}</div>

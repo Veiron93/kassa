@@ -19,10 +19,25 @@
 
 	&All {
 		border: 1px solid red;
+		width: 600px;
 
 		.listProducts {
 			display: grid;
-			grid-template-columns: repeat(4, 1fr);
+			grid-template-columns: repeat(3, 1fr);
+		}
+
+		.listSelected {
+			margin-top: 20px;
+
+			.product {
+				border: 1px solid red;
+				display: flex;
+				column-gap: 20px;
+
+				&:not(:last-child) {
+					margin-bottom: 10px;
+				}
+			}
 		}
 	}
 }

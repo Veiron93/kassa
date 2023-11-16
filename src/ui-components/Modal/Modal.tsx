@@ -5,18 +5,26 @@ import styles from "./Modal.module.scss";
 import Button from "@/ui-components/Button/Button";
 
 interface Modal {
+	children?: any;
+
 	state: boolean;
 	title?: string | number;
 	description?: string | number;
-	children?: any;
-	onChange?: any;
+	btnOkName?: string;
+
+	onState?: any;
+	onComplete?: any;
 }
 
 const Modal = (props: Modal) => {
 	const [state, setState] = useState<boolean>(props.state);
 
 	function handlerStateModal(state: boolean) {
-		props.onChange(state);
+		props.onState(state);
+	}
+
+	function handlerCompleteModal() {
+		props.onComplete();
 	}
 
 	useEffect(() => {
@@ -32,6 +40,9 @@ const Modal = (props: Modal) => {
 						{props.description && <div className={styles.modalDescription}>{props.description}</div>}
 						<div className={styles.modalContent}>{props.children}</div>
 						<div className={styles.modalBtns}>
+							<Button className={styles.ok} onClick={() => handlerCompleteModal()}>
+								{props.btnOkName ? props.btnOkName : "ОК"}
+							</Button>
 							<Button className={styles.cancel} onClick={() => handlerStateModal(false)}>
 								Отмена
 							</Button>

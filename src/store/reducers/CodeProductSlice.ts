@@ -2,16 +2,22 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface CodeProductState {
 	code: string;
+	state: boolean;
 }
 
 const initialState: CodeProductState = {
 	code: "",
+	state: false,
 };
 
 export const CodeProductSlice: any = createSlice({
 	name: "codeProduct",
 	initialState,
 	reducers: {
+		state(state, action) {
+			state.state = action.payload;
+		},
+
 		increment(state, action) {
 			if (state.code == null) {
 				state.code = action.payload;

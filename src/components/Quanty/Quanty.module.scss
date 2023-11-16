@@ -1,0 +1,25 @@
+.quanty {
+	display: flex;
+	column-gap: 5px;
+
+	button {
+		width: 40px;
+		cursor: pointer;
+		user-select: none;
+		font-size: 18px;
+	}
+
+	input {
+		height: 40px;
+		width: 46px;
+		//border: 1px solid red;
+		border: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		user-select: none;
+		padding: 0;
+		text-align: center;
+	}
+}

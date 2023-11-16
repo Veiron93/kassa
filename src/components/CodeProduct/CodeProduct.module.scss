@@ -1,7 +1,8 @@
 .CodeProduct {
-	//border: 1px solid red;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 	margin-top: auto;
-	background: #4e4e4e;
 
 	&Preview {
 		height: 60px;
@@ -53,10 +54,17 @@
 	}
 }
 
-// .CodeProduct.active {
-// 	//border-color: green;
+.keypad {
+	background: #000;
+}
 
-// 	.CodeProductShow {
-// 		display: none;
-// 	}
+// &:before {
+// 	content: "";
+// 	display: block;
+// 	background: #000;
+// 	position: absolute;
+// 	width: 100%;
+// 	height: 100vh;
+// 	top: 0;
+// 	bottom: 0;
 // }

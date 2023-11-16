@@ -1,10 +1,13 @@
 import { useAppDispatch } from "../../store/hooks/redux";
 import { CodeProductSlice } from "../../store/reducers/CodeProductSlice";
 
-import styles from "./NumericKeypad.module.scss";
+import style from "./NumericKeypad.module.scss";
 
-const NumericKeypad = () => {
-	//const { code } = useAppSelector((state: any) => state.CodeProductReducer);
+interface NumericKeypad {
+	className?: string;
+}
+
+const NumericKeypad = (props: NumericKeypad) => {
 	const { increment } = CodeProductSlice.actions;
 	const dispatch = useAppDispatch();
 
@@ -33,9 +36,9 @@ const NumericKeypad = () => {
 	];
 
 	return (
-		<div className={styles.NumericKeypad}>
+		<div className={`${style.NumericKeypad} ${props.className}`}>
 			{keys.map((key) => (
-				<div key={key.code} className={styles.NumericKeypadButton} data-code-key={key.code} onClick={getCodeKey}>
+				<div key={key.code} className={style.NumericKeypadButton} data-code-key={key.code} onClick={getCodeKey}>
 					{key.text}
 				</div>
 			))}

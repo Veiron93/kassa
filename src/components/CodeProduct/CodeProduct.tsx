@@ -1,31 +1,35 @@
-import { useState } from "react";
-
 import { useAppSelector, useAppDispatch } from "../../store/hooks/redux";
-import { CodeProductSlice } from "../../store/reducers/CodeProductSlice";
 
 import styles from "./CodeProduct.module.scss";
+
+// store
+import { CodeProductSlice } from "../../store/reducers/CodeProductSlice";
 
 import NumericKeypad from "./../NumericKeypad/NumericKeypad";
 
 const CodeProduct = () => {
-	const { delSymbol, clearCode } = CodeProductSlice.actions;
+	// STORE
 	const dispatch = useAppDispatch();
 
-	const { code } = useAppSelector((state: any) => state.CodeProductReducer);
-	const [stateCodeProduct, setStateCodeProduct] = useState<boolean>(false);
+	// state
+	const { code, state: stateProductCode } = useAppSelector((state: any) => state.CodeProductReducer);
 
-	const stateNumericKeypad: any = (): void => {
-		setStateCodeProduct(!stateCodeProduct);
+	// actions
+	const { delSymbol, clearCode, state } = CodeProductSlice.actions;
+	// --
+
+	function onState(): void {
+		dispatch(state(!stateProductCode));
 
 		// при закрытии удаляем код товара
-		if (stateCodeProduct === false) {
+		if (!stateProductCode) {
 			dispatch(clearCode());
 		}
-	};
+	}
 
 	return (
 		<div className={`${styles.CodeProduct} `}>
-			{stateCodeProduct && (
+			{stateProductCode && (
 				<div className={`${styles.CodeProductContent} `}>
 					<div className={styles.CodeProductPreview}>
 						<div className={styles.CodeProductPreviewNumber}>{code}</div>
@@ -34,12 +38,12 @@ const CodeProduct = () => {
 						</div>
 					</div>
 
-					<NumericKeypad />
+					<NumericKeypad className={styles.keypad} />
 				</div>
 			)}
 
-			<div className={styles.CodeProductShow} onClick={() => stateNumericKeypad()}>
-				{stateCodeProduct ? "Отмена" : "Ввести код товара"}
+			<div className={styles.CodeProductShow} onClick={() => onState()}>
+				{stateProductCode ? "Отмена" : "Ввести код товара"}
 			</div>
 		</div>
 	);

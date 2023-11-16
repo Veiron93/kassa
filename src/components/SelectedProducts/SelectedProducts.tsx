@@ -30,6 +30,10 @@ const SelectedProducts = () => {
 		setStateModal(state);
 	}
 
+	function handlerCompleteModal() {
+		console.log(888);
+	}
+
 	function onAddProductToSelectedList(code: string) {
 		const index = listSelectedProducts.findIndex((product) => product.code === code);
 
@@ -64,7 +68,7 @@ const SelectedProducts = () => {
 				</div>
 			)}
 
-			<Modal onChange={handlerStateModal} state={stateModal} title="Избранные товары">
+			<Modal onState={handlerStateModal} onComplete={handlerCompleteModal} state={stateModal} btnOkName="Добавить" title="Избранные товары">
 				<div className={styles.selectedProductsAll}>
 					<div className={styles.listProducts}>
 						{selectedProducts.map((product) => (
@@ -81,7 +85,7 @@ const SelectedProducts = () => {
 					</div>
 					<div className={styles.listSelected}>
 						{listSelectedProducts.map((product) => (
-							<div key={product.code}>
+							<div className={styles.product} key={product.code}>
 								<p>code - {product.code}</p>
 								<p>quanty - {product.quanty}</p>
 							</div>

@@ -62,17 +62,14 @@ export const CartSlice: any = createSlice({
 		changeQuanty(state, action) {
 			const codeProduct = action.payload.code;
 			const quanty = action.payload.quanty;
-			const type = action.payload.type;
 
 			const product: Product | undefined = state.products?.find((product: Product) => product.code === codeProduct);
 
 			if (product && state.products?.length && state.products.length > 0) {
-				if (type && type === "manual") {
-					product.quanty = quanty;
+				if (quanty > product.leftover) {
+					product.quanty = product.leftover;
 				} else {
-					if ((quanty === -1 && product.quanty != 1) || quanty === 1) {
-						product.quanty += quanty;
-					}
+					product.quanty = quanty;
 				}
 			}
 		},

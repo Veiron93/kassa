@@ -7,7 +7,7 @@ import styles from "./Layout.module.scss";
 import { getUser } from "@/services/users";
 
 //store
-import { useAppDispatch } from "@/store/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
 import { UsersSlice } from "@/store/reducers/UsersSlice";
 
 // components
@@ -20,8 +20,12 @@ function Layout() {
 	// STORE
 	const dispatch = useAppDispatch();
 
+	// state
+	const { state: stateProductCode } = useAppSelector((state: any) => state.CodeProductReducer);
+
 	// actions
 	const { setUser } = UsersSlice.actions;
+	// --
 
 	useEffect(() => {
 		const userAuth = localStorage.getItem("user");
@@ -38,8 +42,8 @@ function Layout() {
 			</div>
 			<div className={styles.layoutSide}>
 				<AboutCart />
-				<Navigation />
-				<SelectedProducts />
+				{!stateProductCode && <Navigation />}
+				{!stateProductCode && <SelectedProducts />}
 				<CodeProduct />
 			</div>
 		</main>
