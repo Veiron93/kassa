@@ -8,8 +8,8 @@ import { getSelectedProducts } from "@/services/selected-products";
 import { Product } from "@/models/products";
 
 // components
-
 import Modal from "@/ui-components/Modal/Modal";
+import Quanty from "@/components/Quanty/Quanty";
 
 const SelectedProducts = () => {
 	const [selectedProducts, setSelectedProducts] = useState<Array<Product>>([]);
@@ -87,7 +87,7 @@ const SelectedProducts = () => {
 						{listSelectedProducts.map((product) => (
 							<div className={styles.product} key={product.code}>
 								<p>code - {product.code}</p>
-								<p>quanty - {product.quanty}</p>
+								<Quanty value={product.quanty} />
 							</div>
 						))}
 					</div>

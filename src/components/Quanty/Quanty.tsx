@@ -23,6 +23,8 @@ const Quanty = (props: Props) => {
 	}
 
 	useEffect(() => {
+		console.log(777);
+
 		idTimeout = setTimeout(() => {
 			handlerQuanty();
 		}, 1500);
