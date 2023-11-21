@@ -12,10 +12,14 @@ const Tray = () => {
 	const { products } = useAppSelector((state: any) => state.CartReducer);
 
 	return (
-		<div className={styles.trayProductList}>
-			<Price />
-			{products.length > 0 && <Btns />}
-		</div>
+		<>
+			{products.length > 0 && (
+				<div className={styles.trayProductList}>
+					<Price />
+					<Btns />
+				</div>
+			)}
+		</>
 	);
 };
 

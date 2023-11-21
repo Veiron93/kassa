@@ -3,27 +3,26 @@
 .navigation {
 	display: flex;
 	flex-wrap: wrap;
+	column-gap: 5px;
 
 	.navigationItem {
-		width: 50%;
-		height: 50px;
-		border-color: #fff;
+		//height: 36px;
+		padding: 0px 10px;
 
-		padding: 20px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 
-		font-size: 17px;
+		font-size: 16px;
 		font-weight: 500;
 		user-select: none;
 		cursor: pointer;
 
-		background: $color_main;
+		background: #a3a3a3;
 		color: #000;
 
-		&:nth-child(2n + 1) {
-			background: #c4c4c4;
+		img {
+			height: 24px;
 		}
 
 		// &.navItemEnterCode {
@@ -35,7 +34,7 @@
 		// }
 
 		&.navItemSettings {
-			background: #5de7b7;
+			//background: #5de7b7;
 		}
 	}
 }

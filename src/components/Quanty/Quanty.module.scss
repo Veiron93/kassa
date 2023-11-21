@@ -1,12 +1,17 @@
 .quanty {
 	display: flex;
-	column-gap: 5px;
+	//column-gap: 5px;
+
+	border: 1px solid rgb(210, 210, 210);
+	border-radius: 4px;
 
 	button {
-		width: 40px;
+		width: 36px;
 		cursor: pointer;
 		user-select: none;
-		font-size: 18px;
+		font-size: 24px;
+		border: none;
+		background: none;
 	}
 
 	input {

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
 import { CartSlice } from "@/store/reducers/CartSlice";
 
-import styles from "./productsList.module.scss";
+import styles from "./ProductsList.module.scss";
 
 // components
 import Product from "@/components/Cart/Product/Product";

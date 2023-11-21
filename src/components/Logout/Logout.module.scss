@@ -1,0 +1,13 @@
+.logout {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 70px;
+
+	background: red;
+	cursor: pointer;
+
+	img {
+		width: 25px;
+	}
+}

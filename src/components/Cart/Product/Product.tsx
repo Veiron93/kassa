@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import styles from "./product.module.scss";
+import styles from "./Product.module.scss";
 
 // helpers
 import { priceProduct } from "@/helpers/cart";
@@ -48,7 +48,7 @@ const ProductListGoods = (props: any) => {
 
 	// PRICE
 	const [priceProductTotal, setPriceProductTotal] = useState<number>(0);
-	const [unitPriceProduct, setUnitPriceProduct] = useState<number>(0);
+	//const [unitPriceProduct, setUnitPriceProduct] = useState<number>(0);
 	const [discountSum, setDiscountSum] = useState<number>(0);
 
 	useEffect(() => {
@@ -63,21 +63,78 @@ const ProductListGoods = (props: any) => {
 		const recountResult = priceProduct(product, discount);
 
 		setPriceProductTotal(Number(recountResult.priceProduct.toFixed(2)));
-		setUnitPriceProduct(Number(recountResult.unitPriceProduct.toFixed(2)));
+		//setUnitPriceProduct(Number(recountResult.unitPriceProduct.toFixed(2)));
 		setDiscountSum(Number(recountResult.discountSum.toFixed(2)));
+	}
+	// --
+
+	// MORE
+	const [stateProductMore, setStateProductMore] = useState<boolean>(false);
+
+	function onProductMore(): void {
+		setStateProductMore(!stateProductMore);
 	}
 	// --
 
 	return (
 		<div id={"product-" + product.code} className={styles.product} key={product.code}>
-			<div className={styles.productName}>
+			<div className={styles.productSectionTop}>
+				<div className={styles.productName}>{product.name}</div>
+			</div>
+
+			<div className={styles.productSectionBottom}>
+				<div className={styles.productBtnMore} onClick={onProductMore}>
+					<img src={Icons.moreWhite} alt="" />
+				</div>
+
+				<div className={styles.productPrice}>
+					{/* <div className={styles.productPrice__unit}>{unitPriceProduct} / шт</div> */}
+
+					<div className={styles.productPrice__discount} onClick={() => !discountCart && dispatch(showDiscount(product))}>
+						{discountSum ? <span>- {discountSum} р.</span> : <img src={Icons.discount} alt="" />}
+					</div>
+
+					<div className={styles.productPrice__total}>
+						{/* <span>{unitPriceProduct} шт. </span> */}
+						<span>{priceProductTotal} р</span>
+					</div>
+				</div>
+
+				<Quanty className={styles.quantyProduct} value={product.quanty} max={product.leftover} onChange={handlerQuanty} />
+
+				{/* <div className={styles.productCode}>
+					Код: <span>{product.code}</span>
+				</div> */}
+
+				{/* <div className={styles.productNumber}>1.</div> */}
+
+				{/* <div className={styles.productBtnDel} onClick={onDelProduct}>
+					<img src={Icons.trash} alt="" />
+				</div> */}
+			</div>
+
+			{stateProductMore && (
+				<div className={styles.productOtherWrapper}>
+					<div className={styles.info}>
+						<p>Код: {product.code}</p>
+						<p>Остаток: {product.leftover}</p>
+						<p>Цена: {product.price}</p>
+					</div>
+
+					<div className={styles.btns}>
+						<div className={styles.productBtnDel} onClick={onDelProduct}>
+							<img src={Icons.trash} alt="" />
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* <div className={styles.productName}>
 				<span>{product.name}</span>
 				<span>
 					Код: <span>{product.code}</span>
 				</span>
 			</div>
-
-			<Quanty value={product.quanty} max={product.leftover} onChange={handlerQuanty} />
 
 			<div className={styles.productPrice}>
 				<div className={styles.productPrice__total}>{priceProductTotal}</div>
@@ -92,7 +149,7 @@ const ProductListGoods = (props: any) => {
 				<div className={`${styles.productBtn} ${styles.productBtnDel}`} onClick={onDelProduct}>
 					<img src={Icons.trash} alt="" />
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };

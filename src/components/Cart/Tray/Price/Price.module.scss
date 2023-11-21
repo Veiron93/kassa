@@ -1,27 +1,34 @@
 .pricesTrayProductsList {
 	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	row-gap: 5px;
+	align-items: center;
+	//justify-content: space-between;
+
+	//border: 1px solid red;
+	// flex-direction: column;
+	// justify-content: flex-end;
+	//row-gap: 5px;
 
 	//border: 1px solid red;
 
 	.price,
 	.discount {
 		font-weight: 500;
-		font-size: 16px;
+		font-size: 14px;
+		color: #fff;
 	}
 
 	.price {
+		margin-right: 10px;
 	}
 
 	.discount {
-		color: red;
+		color: rgb(255, 255, 255);
 	}
 
 	.totalPrice {
-		font-size: 22px;
-		font-weight: bold;
-		margin-bottom: -5px;
+		font-size: 18px;
+		font-weight: 600;
+		margin-left: auto;
+		color: #fff;
 	}
 }

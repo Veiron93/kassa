@@ -5,6 +5,7 @@ interface Props {
 	value: number;
 	max?: number;
 	onChange?: any;
+	className?: string;
 }
 
 const Quanty = (props: Props) => {
@@ -45,7 +46,7 @@ const Quanty = (props: Props) => {
 	}
 
 	return (
-		<div className={styles.quanty}>
+		<div className={`${styles.quanty} ${props.className ? props.className : ""}`}>
 			<button onClick={() => changeQuantyProduct("minus")}>-</button>
 			<input type="number" value={quanty} onInput={(e: any) => manualQuanty(e.target.value)} />
 			<button onClick={() => changeQuantyProduct("plus")}>+</button>

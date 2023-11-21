@@ -17,7 +17,7 @@ const initialState: CartState = {
 		{
 			code: "6953156207295",
 			name: "Адаптер питания Baseus 30w (чёрный)",
-			price: 700,
+			price: 17700,
 			leftover: 10,
 			quanty: 2,
 		},

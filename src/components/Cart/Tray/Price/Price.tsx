@@ -28,9 +28,10 @@ const Price = () => {
 
 	return (
 		<div className={styles.pricesTrayProductsList}>
-			<span className={styles.price}>Сумма: {sumPrice} р.</span>
-			{discount > 0 && <span className={styles.discount}>Скидка: - {discount} р.</span>}
-			<span className={styles.totalPrice}>Итого: {sumPrice - discount} р.</span>
+			{/* <span className={styles.price}>Сумма: {sumPrice}</span> */}
+			{/* {discount > 0 && <span className={styles.discount}>Скидка: - {discount}</span>} */}
+			{/* <span className={styles.totalPrice}>Итого: {sumPrice - discount} р.</span> */}
+			<span className={styles.totalPrice}>{sumPrice - discount} &#8381;</span>
 		</div>
 	);
 };
