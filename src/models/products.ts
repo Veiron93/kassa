@@ -9,6 +9,9 @@ export interface Product {
 	name: string;
 	price: number;
 	leftover: number;
+}
+
+export interface ProductCart extends Product {
 	quanty: number;
 	discount?: Discount;
 }

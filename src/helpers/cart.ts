@@ -1,6 +1,6 @@
-import { Product, Discount } from "@/models/products";
+import { ProductCart, Discount } from "@/models/products";
 
-export function priceProduct(product: Product, discount: Discount | null = null) {
+export function priceProduct(product: ProductCart, discount: Discount | null = null) {
 	let priceProduct: number = 0;
 	let unitPriceProduct: number = 0;
 	let discountSum: number = 0;
@@ -86,7 +86,7 @@ export function priceProduct(product: Product, discount: Discount | null = null)
 	};
 }
 
-export function getDiscountCart(productsDiscount: any, productCart: Array<Product>): number {
+export function getDiscountCart(productsDiscount: any, productCart: Array<ProductCart>): number {
 	let discount = 0;
 
 	if (Object.keys(productsDiscount).length || productCart.length) {

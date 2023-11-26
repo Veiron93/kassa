@@ -1,13 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { Discount, Product } from "@/models/products";
+import { Discount, ProductCart } from "@/models/products";
 
 interface CartState {
-	products: Array<Product> | null;
+	products: Array<ProductCart> | null;
 	stateAddProducts: boolean;
-
 	productsDiscount: any;
-
 	discountCart: Discount | null;
 }
 
@@ -22,6 +20,14 @@ const initialState: CartState = {
 			quanty: 2,
 		},
 		{
+			code: "6932172606222",
+			name: "Чехол iPhone 15 UGREEN",
+			price: 2300,
+			leftover: 2,
+			quanty: 1,
+		},
+
+		{
 			code: "6932172606909",
 			name: "Адаптер питания Baseus 10.5w (чёрный)",
 			price: 1200,
@@ -29,6 +35,8 @@ const initialState: CartState = {
 			quanty: 3,
 		},
 	],
+
+	//products: [],
 
 	// возможность добавить товар (отслеживает на странице событие ввода)
 	stateAddProducts: true,
@@ -51,10 +59,8 @@ export const CartSlice: any = createSlice({
 
 		// удалить товар
 		del(state, action) {
-			const index: number | undefined = state.products?.findIndex((product: Product) => product.code === action.payload);
-
-			if (index !== undefined) {
-				state.products?.splice(index, 1);
+			if (state.products) {
+				state.products = state.products.filter((product) => product.code !== action.payload);
 			}
 		},
 
@@ -63,14 +69,23 @@ export const CartSlice: any = createSlice({
 			const codeProduct = action.payload.code;
 			const quanty = action.payload.quanty;
 
-			const product: Product | undefined = state.products?.find((product: Product) => product.code === codeProduct);
+			const product: ProductCart | undefined = state.products?.find((product: ProductCart) => product.code === codeProduct);
 
-			if (product && state.products?.length && state.products.length > 0) {
+			if (product) {
 				if (quanty > product.leftover) {
 					product.quanty = product.leftover;
 				} else {
 					product.quanty = quanty;
 				}
+			}
+		},
+
+		incrementQuanty(state, action) {
+			const codeProduct = action.payload;
+			const product: ProductCart | undefined = state.products?.find((product: ProductCart) => product.code === codeProduct);
+
+			if (product) {
+				product.quanty = product.quanty + 1;
 			}
 		},
 

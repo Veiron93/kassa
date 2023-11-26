@@ -1,4 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+// constxts
+import { CartProductContext } from "@/contexts/CartProductContext";
+
+// models
+import { ProductCart } from "@/models/products";
+
+// services
+import { getProduct } from "@/services/products";
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
@@ -10,24 +19,6 @@ import styles from "./ProductsList.module.scss";
 import Product from "@/components/Cart/Product/Product";
 
 const List = () => {
-	// ТЕСТОВЫЕ ДАННЫЕ
-	// db products
-	let serverProducts = [
-		{ id: 1, name: "Ремешок Apple Watch", price: 1500, leftover: 2, code: 1323322332 },
-		{ id: 2, name: "Кейс Apple Watch", price: 450, leftover: 1, code: 32323323 },
-		{ id: 3, name: "Чехол iPhone 14", price: 650, leftover: 1, code: 3232223 },
-		{ id: 5, name: "Адаптер питания Baseus 30w (чёрный)", price: 700, leftover: 10, code: 6953156207295 },
-		{ id: 6, name: "Адаптер питания Baseus 10.5w (чёрный)", price: 1200, leftover: 12, code: 6932172606909 },
-	];
-
-	// db discount cards
-	let serverDiscountCards = [
-		{ id: 1, name: "Скидка 20%", type: "percent", discount: 20 },
-		{ id: 2, name: "Скидка 300 руб.", type: "fixed", discount: 300 },
-	];
-
-	// --
-
 	// STORE
 	const dispatch = useAppDispatch();
 
@@ -35,8 +26,7 @@ const List = () => {
 	const { products, stateAddProducts, discountCart } = useAppSelector((state: any) => state.CartReducer);
 
 	// actions
-	const { changeQuanty, add, addDiscountCart } = CartSlice.actions;
-
+	const { add, addDiscountCart, incrementQuanty } = CartSlice.actions;
 	// --
 
 	useEffect(() => {
@@ -62,7 +52,7 @@ const List = () => {
 			if (e.key !== "Enter") {
 				codeNewProduct += e.key;
 			} else if (e.key === "Enter" && codeNewProduct) {
-				addProduct(Number(codeNewProduct));
+				addProduct(codeNewProduct);
 				codeNewProduct = "";
 			}
 		}
@@ -70,38 +60,47 @@ const List = () => {
 
 	/**
 	 * добавляет товар в список
-	 * @param {Number} code
-	 * @returns {boolean | void}
+	 * @param {number} code
+	 * @returns {void}
 	 */
 
-	function addProduct(code: Number): boolean | void {
-		let isAdded: Number = products.findIndex((product: any) => Number(product.code) === code);
+	function addProduct(code: string): void {
+		// проверяем в store, а не в state
+		let isAdded: number = products.findIndex((product: any) => product.code === code);
 
 		// если товар есть в списке, то увеличиваем его количество на 1
 		if (isAdded !== -1) {
-			dispatch(changeQuanty({ code: code, quanty: 1 }));
+			dispatch(incrementQuanty(code));
 		}
 
 		// если товара нет в списке, то добавляем
 		if (isAdded === -1) {
-			let newProduct: any = {};
-
-			let product: Object | undefined = serverProducts.find((product) => product.code === code);
-
-			if (product) {
-				newProduct = Object.assign(product);
-				newProduct.quanty = 1;
-				dispatch(add(newProduct));
-			} else {
-				console.log("товар не найден в базе");
-			}
+			getProduct(code).then((response) => {
+				if (response) {
+					let product: ProductCart;
+					product = Object.assign(response);
+					product.quanty = 1;
+					dispatch(add(product));
+				} else {
+					console.log("товар не найден в базе");
+				}
+			});
 		}
 	}
 
+	// function getCartLocalStorage() {
+	// 	const cartData = localStorage.get("cart-borsh");
+	// 	return cartData ? JSON.parse(cartData) : null;
+	// }
+
+	// добавляет товар localStorage
+	//function addProductCartLocalStorage(code: Number, quany: Number): boolean | void {}
+
 	return (
 		<div className={styles.productsList}>
-			{products.map((product: any, index: number) => (
-				<Product product={product} key={index} />
+			{products.map((product: any) => (
+				// <CartProductContext.Provider value={currentProduct} key={product.code}></CartProductContext.Provider>
+				<Product product={product} key={product.code} />
 			))}
 		</div>
 	);

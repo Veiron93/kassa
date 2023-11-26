@@ -16,7 +16,7 @@ const products = {
 		},
 		{ id: 3, name: "Чехол iPhone 14", price: 650, count: 1, code: "3232223", leftover: 5 },
 		{ id: 5, name: "Подставка для iPad", price: 700, count: 1, code: "2323232323", leftover: 22 },
-		{ id: 6, name: "Адаптер питания Kuulaa 20w C+A", price: 1200, count: 1, code: "444442232332", leftover: 9 },
+		{ id: 6, name: "Адаптер питания Kuulaa 20w C+A", price: 1200, count: 1, code: "6932172606909", leftover: 9 },
 	],
 };
 
