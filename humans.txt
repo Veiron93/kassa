@@ -1,0 +1,41 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+
+/* Cleaner */
+    Name:               Tatiana Viktorovna
+    Location:           Russia, Yuzhno-Sakhalinsk
+    Tools:              Mop, Dustpan, Cleaning products
+
+/*  Art-director */
+    Name:               Mikhail Belyaev
+    Location:           Russia, Yuzhno-Sakhalinsk
+    Site:			    rinamika.ru
+    Mail:               hi@rinamika.ru
+    Twitter:            belyaev
+
+/*  Backend developer   */
+    Name:               Suprun Victor
+    Location:           Russia, Yuzhno-Sakhalinsk
+    Mail:               popsul1993@gmail.com
+    Twitter:            popsul
+    Used components:    UFO CMF
+    Used technology:    PHP5, MySQL, jQuery
+    Tools:              Netbeans, Mercurial
+
+/*  Frontend developer, Photographer   */
+    Name:               Opeikin Victor
+    Location:           Russia, Yuzhno-Sakhalinsk
+    Mail:               victor@bravo.bz
+    Site:			    bravo.bz
+    Twitter:            bravoip
+    Used components:    UFO CMF, jQuery
+    Used technology:    HTML5, CSS3, JS
+    Tools:              PixelMator, Netbeans, Visual Studio, Sequel Pro, Mercurial
+
+/*  Designer  */
+    Name:               Ksenia Dolganova
+    Location:           Russia, Yuzhno-Sakhalinsk
+    Mail:               smallboxofbuttons@gmail.com
+    Site:			    smallboxofbuttons.blogspot.ru
+    Tools:              PixelMator

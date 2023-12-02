@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// models
 import { Discount, ProductCart } from "@/models/products";
 
 interface CartState {
