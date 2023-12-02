@@ -11,6 +11,7 @@ interface Modal {
 	title?: string | number;
 	description?: string | number;
 	btnOkName?: string;
+	stateBtnCancel?: boolean;
 
 	onState?: any;
 	onComplete?: any;
@@ -18,6 +19,7 @@ interface Modal {
 
 const Modal = (props: Modal) => {
 	const [state, setState] = useState<boolean>(props.state);
+	const [stateBtnCancel, setStateBtnCancel] = useState<boolean>(props.stateBtnCancel ?? true);
 
 	function handlerStateModal(state: boolean) {
 		props.onState(state);
@@ -43,9 +45,11 @@ const Modal = (props: Modal) => {
 							<Button className={styles.ok} onClick={() => handlerCompleteModal()}>
 								{props.btnOkName ? props.btnOkName : "ОК"}
 							</Button>
-							<Button className={styles.cancel} onClick={() => handlerStateModal(false)}>
-								Отмена
-							</Button>
+							{stateBtnCancel && (
+								<Button className={styles.cancel} onClick={() => handlerStateModal(false)}>
+									Отмена
+								</Button>
+							)}
 						</div>
 					</div>
 				</div>

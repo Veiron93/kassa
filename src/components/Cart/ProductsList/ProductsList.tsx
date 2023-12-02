@@ -68,6 +68,8 @@ const List = () => {
 		// проверяем в store, а не в state
 		let isAdded: number = products.findIndex((product: any) => product.code === code);
 
+		console.log(products);
+
 		// если товар есть в списке, то увеличиваем его количество на 1
 		if (isAdded !== -1) {
 			dispatch(incrementQuanty(code));

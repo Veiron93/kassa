@@ -27,13 +27,17 @@
 		justify-content: center;
 
 		&:before {
-			//border: 1px solid red;
-
 			content: "Отсканируйте товар или добавьте вручную";
+			padding-top: 120px;
+			background-image: url(../../../assets/img/icons/barcode.svg);
+			background-position: top center;
+			background-repeat: no-repeat;
+			background-size: 120px;
 			text-align: center;
 			font-weight: 500;
 			font-size: 24px;
-			color: #dedede;
+			color: #000;
+			opacity: 0.2;
 		}
 	}
 }

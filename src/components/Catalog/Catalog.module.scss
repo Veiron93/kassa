@@ -61,17 +61,15 @@
 
 .catalogProductSkus {
 	&List {
+		width: 400px;
 		//border: 1px solid red;
 
 		.sku {
 			display: flex;
-			width: 300px;
 			padding: 12px 0px;
 			border-bottom: 1px solid rgb(189, 189, 189);
 			cursor: pointer;
 			user-select: none;
-
-			//&:not(:last-child){}
 
 			&Name {
 				font-weight: 500;
@@ -80,10 +78,14 @@
 			}
 
 			&Price {
+				margin-left: auto;
 			}
 
 			&Leftover {
-				margin-left: auto;
+				//border: 1px solid red;
+				width: 85px;
+				margin-left: 20px;
+				text-align: right;
 			}
 		}
 	}

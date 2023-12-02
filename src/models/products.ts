@@ -9,6 +9,7 @@ export interface Product {
 	name: string;
 	price: number;
 	leftover: number;
+	skus?: Array<Product>;
 }
 
 export interface ProductCart extends Product {

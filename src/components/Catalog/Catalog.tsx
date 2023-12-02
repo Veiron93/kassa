@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./Catalog.module.scss";
 
@@ -6,7 +6,7 @@ import styles from "./Catalog.module.scss";
 import products from "@/data/products";
 
 // models
-import { ProductCart } from "@/models/products";
+import { ProductCart, Product } from "@/models/products";
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
@@ -23,39 +23,69 @@ const Catalog = () => {
 	const dispatch = useAppDispatch();
 
 	// state
-	//const { products, stateAddProducts, discountCart } = useAppSelector((state: any) => state.CartReducer);
+	const { products: productsCart } = useAppSelector((state: any) => state.CartReducer);
 
 	// actions
-	const { add } = CartSlice.actions;
+	const { add, incrementQuanty } = CartSlice.actions;
 	// --
 
 	const [stateSkusModal, setStateSkusModal] = useState<boolean>(false);
-	const [skusSelectedProduct, setSkusSelectedProduct] = useState<Array<any>>([]);
+	const [selectedItem, setSelectedItem] = useState<any>(null);
 
-	function selectProduct(code: string) {
-		const productIndex = products.products.findIndex((product: any) => product.code === code);
-		const product = products.products[productIndex];
+	useEffect(() => {
+		if (selectedItem) {
+			if (selectedItem.skus) {
+				setStateSkusModal(true);
+			} else {
+				onAddCart(selectedItem.code);
+			}
+		}
+	}, [selectedItem]);
 
-		if (product.skus) {
-			setSkusSelectedProduct([...product.skus]);
-			setStateSkusModal(true);
+	function selectProduct(product: Product) {
+		setSelectedItem(product);
+	}
+
+	// type (product | sku)
+	function onAddCart(code: string, type = "product") {
+		if (!selectedItem) {
+			return false;
+		}
+
+		const isCart = productsCart.findIndex((product: any) => product.code === code);
+
+		// если есть в корзине, то увеличиваем количество на 1
+		if (isCart !== -1) {
+			dispatch(incrementQuanty(code));
+		}
+
+		// добавляем товар в корзину
+		if (isCart === -1) {
+			let product: Product = selectedItem;
+
+			if (type === "sku") {
+				product = selectedItem.skus.find((sku: any) => sku.code === code);
+			}
+
+			let item: ProductCart = {
+				name: product.name,
+				code: product.code,
+				quanty: 1,
+				price: product.price,
+				leftover: product.leftover,
+			};
+
+			dispatch(add(item));
+		}
+
+		if (type === "product") {
+			setSelectedItem(null);
 		}
 	}
 
-	function onAddProduct(code: string) {
-		let sku: ProductCart | undefined = skusSelectedProduct.find((sku) => sku.code === code);
-
-		// берем часть имени от родителя
-		// если цена не указана, то берем стоимость родителя
-		//
-
-		if (sku) {
-			let product: ProductCart;
-			product = Object.assign(sku);
-			product.quanty = 1;
-
-			dispatch(add(product));
-		}
+	function handlerCompleteModal() {
+		setStateSkusModal(false);
+		setSelectedItem(null);
 	}
 
 	return (
@@ -67,7 +97,7 @@ const Catalog = () => {
 				</div>
 
 				{products.products.map((product: any) => (
-					<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product.code)}>
+					<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product)}>
 						<div className={styles.catalogProductName}>{product.name}</div>
 						<div className={styles.catalogProductInfo}>
 							<div className={styles.price}>{product.price} &#8381;</div>
@@ -80,17 +110,16 @@ const Catalog = () => {
 						</div>
 					</div>
 				))}
-
-				{/* <div className={styles.catalogCategory}></div> */}
 			</div>
 
 			{/* SKUS */}
-			<Modal state={stateSkusModal}>
+			<Modal onComplete={handlerCompleteModal} state={stateSkusModal} btnOkName="Готово" title="Артикулы" stateBtnCancel={false}>
 				<div className={styles.catalogProductSkus}>
 					<div className={styles.catalogProductSkusList}>
-						{skusSelectedProduct &&
-							skusSelectedProduct.map((sku: any) => (
-								<div className={styles.sku} key={sku.code} onClick={() => onAddProduct(sku.code)}>
+						{selectedItem &&
+							selectedItem.skus &&
+							selectedItem.skus.map((sku: any) => (
+								<div className={styles.sku} key={sku.code} onClick={() => onAddCart(sku.code, "sku")}>
 									<div className={styles.skuName}>{sku.name}</div>
 									<div className={styles.skuPrice}>{sku.price} р.</div>
 									<div className={styles.skuLeftover}>{sku.leftover} шт.</div>

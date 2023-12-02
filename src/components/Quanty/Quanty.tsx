@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import styles from "./Quanty.module.scss";
+import { InputType } from "zlib";
 
 interface Props {
 	value: number;
@@ -13,6 +14,7 @@ const Quanty = (props: Props) => {
 	let maxQuanty = props.max ? props.max : null;
 	let idTimeout: any = null;
 
+	const inputQuantyRef = useRef<HTMLInputElement | null>(null);
 	const [quanty, setQuanty] = useState<number | string>(props.value);
 	const [init, setInit] = useState<boolean>(false);
 	const [initExternalEvent, setInitExternalEvent] = useState<boolean>(false);
@@ -67,10 +69,22 @@ const Quanty = (props: Props) => {
 		props.onChange(Number(quanty));
 	}
 
+	function selectValueInputQuanty() {
+		if (inputQuantyRef.current) {
+			inputQuantyRef.current.select();
+		}
+	}
+
 	return (
 		<div className={`${styles.quanty} ${props.className ? props.className : ""}`}>
 			<button onClick={() => changeQuantyProduct("minus")}>-</button>
-			<input type="number" value={quanty} onChange={(e: any) => manualQuanty(e.target.value)} />
+			<input
+				type="number"
+				ref={inputQuantyRef}
+				value={quanty}
+				onFocus={() => selectValueInputQuanty()}
+				onChange={(e: any) => manualQuanty(e.target.value)}
+			/>
 			<button onClick={() => changeQuantyProduct("plus")}>+</button>
 		</div>
 	);
