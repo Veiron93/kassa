@@ -53,7 +53,7 @@ const ProductDiscount = () => {
 		},
 	];
 
-	const discount = {
+	const discount: any = {
 		value: "" as number | string,
 		typeValue: itemsTypeValueDiscount[0].value as number,
 		range: itemsRangeDiscount[0].value as number,
@@ -65,11 +65,20 @@ const ProductDiscount = () => {
 		discount.range = productsDiscount[product.code].range;
 	}
 
+	// const [discountTypeValue, setDiscountTypeValue] = useState<number>(discount.typeValue);
+	// const [discountRange, setDiscountRange] = useState<number>(discount.range);
+
 	const [errorFormDiscount, setErrorFormDiscount] = useState<string | null>(null);
+	const [textInform, setTextInform] = useState<string | null>("wdwd");
+
+	const maxDiscount: any = {
+		1: "1",
+		2: "2",
+		3: "3",
+	};
 
 	function onValueDiscount(e: any) {
 		const element = e.target;
-
 		discount.value = Number(element.value);
 	}
 
@@ -119,6 +128,8 @@ const ProductDiscount = () => {
 					<div className={styles.rangeDiscount}>
 						<ButtonGroup btns={itemsRangeDiscount} activeItem={discount.range} onChange={onRangeDiscount} />
 					</div>
+
+					{/* {discountTypeValue === 1 && <div className={styles.textInform}>{maxDiscount[discountRange]}</div>} */}
 
 					{errorFormDiscount && <div className={styles.error}>{errorFormDiscount}</div>}
 

@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import styles from "./discount.module.scss";
 
 // ui-components
-import Button from "@/ui-components/Button/Button";
 import ButtonGroup from "@/ui-components/ButtonGroup/ButtonGroup";
+import Modal from "@/ui-components/Modal/Modal";
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
@@ -16,10 +16,11 @@ const Discount = () => {
 	const dispatch = useAppDispatch();
 
 	// state
-	const { products, discountCart } = useAppSelector((state: any) => state.CartReducer);
+	const { discountCart } = useAppSelector((state: any) => state.CartReducer);
+	const { state: stateCartDiscount } = useAppSelector((state: any) => state.CartDiscountReducer);
 
 	// actions
-	const { onStateAddProducts, addDiscountCart, delDiscountCart } = CartSlice.actions;
+	const { addDiscountCart, delDiscountCart } = CartSlice.actions;
 	const { hidden: hiddenCartDiscount } = CartDiscountSlice.actions;
 
 	// BUTTON GROUP
@@ -56,10 +57,10 @@ const Discount = () => {
 		discount.typeValue = Number(value);
 	}
 
-	function validationFormDiscount(): void | boolean {
+	function validationFormDiscount(): void | null {
 		if (discount.value === 0 || discount.value === null || discount.value === "") {
 			setErrorFormDiscount("Введите скидку");
-			return false;
+			return null;
 		}
 
 		onAddDiscountCart();
@@ -75,43 +76,52 @@ const Discount = () => {
 		dispatch(hiddenCartDiscount());
 	}
 
+	function onStateModal(state: boolean) {
+		if (!state) {
+			dispatch(hiddenCartDiscount());
+			setErrorFormDiscount(null);
+		}
+	}
+
+	function handlerModalBnts(code: string) {
+		if (code === "del") {
+			delCartDiscount();
+		}
+	}
+
+	// кнопки в Modal
+	const btns = [{ name: "Удалить", code: "del" }];
+
 	return (
-		<div className={styles.cartDiscount}>
-			<div className={styles.cartDiscountWrapper}>
-				<div className={styles.title}>Скидка</div>
+		<>
+			<Modal
+				state={stateCartDiscount}
+				title="Скидка"
+				description="Скидка распределится между позициями"
+				btnOkName="Применить"
+				onComplete={validationFormDiscount}
+				onState={onStateModal}
+				onCallbackBtns={handlerModalBnts}
+				btns={btns}
+			>
+				<div className={styles.cartDiscount}>
+					<div className={styles.sumDiscount}>
+						<input type="number" placeholder="Скидка" defaultValue={discount.value} onChange={onValueDiscount} />
 
-				<div className={styles.cartDiscountDescription}>Скидка распределится между позициями</div>
-
-				<div className={styles.sumDiscount}>
-					<input type="number" placeholder="Скидка" defaultValue={discount.value} onChange={onValueDiscount} />
-
-					<div className={styles.typeValueDiscount}>
-						<ButtonGroup btns={itemsTypeValueDiscount} activeItem={discount.typeValue} onChange={onTypeValueDiscount} />
+						<div className={styles.typeValueDiscount}>
+							<ButtonGroup btns={itemsTypeValueDiscount} activeItem={discount.typeValue} onChange={onTypeValueDiscount} />
+						</div>
 					</div>
+
+					{/* <div className={styles.codeDiscount}>
+						<input type="number" placeholder="Код" defaultValue={discount.value} onChange={onValueDiscount} />
+						<div className={styles.textInfo}>Промокод, сертификат, скидочная карта</div>
+					</div> */}
+
+					{errorFormDiscount && <div className={styles.error}>{errorFormDiscount}</div>}
 				</div>
-
-				{/* <div className={styles.codeDiscount}>
-					<input type="number" placeholder="Код" defaultValue={discount.value} onChange={onValueDiscount} />
-					<div className={styles.textInfo}>Промокод, сертификат, скидочная карта</div>
-				</div> */}
-
-				{errorFormDiscount && <div className={styles.error}>{errorFormDiscount}</div>}
-
-				<div className={styles.btns}>
-					<Button className={styles.okDiscount} onClick={validationFormDiscount}>
-						ОК
-					</Button>
-					<Button className={styles.cancelDiscount} onClick={() => dispatch(hiddenCartDiscount())}>
-						Отмена
-					</Button>
-					{discount.value && (
-						<Button className={styles.delDiscount} onClick={delCartDiscount}>
-							Удалить
-						</Button>
-					)}
-				</div>
-			</div>
-		</div>
+			</Modal>
+		</>
 	);
 };
 

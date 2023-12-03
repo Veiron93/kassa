@@ -1,8 +1,10 @@
 import styles from "./Header.module.scss";
 
-import { CartSlice } from "@/store/reducers/CartSlice";
+// store
 import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
+import { CartSlice } from "@/store/reducers/CartSlice";
 
+// ui-components
 import ButtonIcon from "@/ui-components/ButtonIcon/ButtonIcon";
 
 // images
@@ -16,13 +18,18 @@ const Header = (props: any) => {
 	const { products } = useAppSelector((state: any) => state.CartReducer);
 
 	//actions
-	const { clearCart } = CartSlice.actions;
+	const { clearCart, delDiscountCart } = CartSlice.actions;
 	// --
+
+	function onClearCart() {
+		dispatch(clearCart());
+		dispatch(delDiscountCart());
+	}
 
 	return (
 		<div className={`${styles.cartHeader} ${props.className ? props.className : ""}`}>
 			<div className={styles.countProducts}>Товаров: {products.length}</div>
-			<ButtonIcon className={styles.btnClear} img={IconsTrash} event={() => dispatch(clearCart())}></ButtonIcon>
+			<ButtonIcon className={styles.btnClear} img={IconsTrash} event={() => onClearCart()}></ButtonIcon>
 		</div>
 	);
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-// constxts
+// contexts
 import { CartProductContext } from "@/contexts/CartProductContext";
 
 // models

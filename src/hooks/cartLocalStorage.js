@@ -2,7 +2,7 @@ export function setCartLocalStore(products, productsDiscount, discountCart) {
 	const cart = {
 		products: [],
 		discountProducts: [],
-		discount: null,
+		discount: discountCart ?? null,
 	};
 
 	// товары
@@ -11,22 +11,17 @@ export function setCartLocalStore(products, productsDiscount, discountCart) {
 			let item = {
 				code: product.code,
 				quanty: product.quanty,
+				discount: productsDiscount[Number(product.code)] ?? null,
 			};
 
 			cart.products.push(item);
 		});
 	}
 
-	// товары со скидкой
-	if (productsDiscount.length) {
-	}
-
-	// скидка на всю корзину
-
 	localStorage.setItem("cart", JSON.stringify(cart));
 
 	//console.log(cart);
 	//console.log(products);
-	console.log(productsDiscount);
+	//console.log(productsDiscount);
 	// console.log(discountCart);
 }

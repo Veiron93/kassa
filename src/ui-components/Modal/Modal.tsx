@@ -15,6 +15,9 @@ interface Modal {
 
 	onState?: any;
 	onComplete?: any;
+	onCallbackBtns?: any;
+
+	btns?: Array<any>;
 }
 
 const Modal = (props: Modal) => {
@@ -29,6 +32,10 @@ const Modal = (props: Modal) => {
 		props.onComplete();
 	}
 
+	function handlerCallbackBtn(code: string) {
+		props.onCallbackBtns(code);
+	}
+
 	useEffect(() => {
 		setState(props.state);
 	}, [props.state]);
@@ -39,17 +46,29 @@ const Modal = (props: Modal) => {
 				<div className={styles.modal}>
 					<div className={styles.modalWrapper}>
 						{props.title && <div className={styles.modalTitle}>{props.title}</div>}
+
 						{props.description && <div className={styles.modalDescription}>{props.description}</div>}
+
 						<div className={styles.modalContent}>{props.children}</div>
+
 						<div className={styles.modalBtns}>
 							<Button className={styles.ok} onClick={() => handlerCompleteModal()}>
 								{props.btnOkName ? props.btnOkName : "ОК"}
 							</Button>
+
 							{stateBtnCancel && (
 								<Button className={styles.cancel} onClick={() => handlerStateModal(false)}>
 									Отмена
 								</Button>
 							)}
+
+							{props.btns &&
+								props.btns.length > 0 &&
+								props.btns.map((btn, index) => (
+									<Button key={index} onClick={() => handlerCallbackBtn(btn.code)}>
+										{btn.name}
+									</Button>
+								))}
 						</div>
 					</div>
 				</div>

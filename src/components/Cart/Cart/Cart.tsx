@@ -17,7 +17,6 @@ const Cart = () => {
 	const { products, productsDiscount, discountCart } = useAppSelector((state: any) => state.CartReducer);
 
 	const { state: stateProductDiscount } = useAppSelector((state: any) => state.ProductDiscountReducer);
-	const { state: stateCartDiscount } = useAppSelector((state: any) => state.CartDiscountReducer);
 
 	// сохранение корзины в LocalStorage
 	useDeepCompareEffect(() => {
@@ -26,11 +25,20 @@ const Cart = () => {
 
 	return (
 		<>
+			{/* шапка корзины */}
 			{products.length > 0 && <Header />}
+
+			{/* список товаров */}
 			<CartProductsList />
+
+			{/* трей  */}
 			{products.length > 0 && <CartTray />}
+
+			{/* скидка на товар */}
 			{products.length > 0 && stateProductDiscount && <ProductDiscount />}
-			{products.length > 0 && stateCartDiscount && <Discount />}
+
+			{/* скидка на весь заказ */}
+			{products.length > 0 && <Discount />}
 		</>
 	);
 };
