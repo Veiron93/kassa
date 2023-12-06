@@ -35,22 +35,4 @@
 		margin-bottom: 20px;
 		//margin-top: 20px;
 	}
-
-	.btns {
-		display: flex;
-		column-gap: 20px;
-		margin-top: 30px;
-
-		> div {
-			width: 110px;
-		}
-
-		.okDiscount {
-			//background: #000;
-		}
-
-		.delDiscount {
-			margin-left: auto;
-		}
-	}
 }

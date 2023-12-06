@@ -64,11 +64,14 @@ const Modal = (props: Modal) => {
 
 							{props.btns &&
 								props.btns.length > 0 &&
-								props.btns.map((btn, index) => (
-									<Button key={index} onClick={() => handlerCallbackBtn(btn.code)}>
-										{btn.name}
-									</Button>
-								))}
+								props.btns.map(
+									(btn, index) =>
+										btn.state && (
+											<Button key={index} onClick={() => handlerCallbackBtn(btn.code)}>
+												{btn.name}
+											</Button>
+										)
+								)}
 						</div>
 					</div>
 				</div>

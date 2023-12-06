@@ -112,6 +112,7 @@ export const CartSlice: any = createSlice({
 			delete state.productsDiscount[productCode];
 		},
 
+		// скидка "На весь заказ"
 		addDiscountCart(state, action) {
 			let discount = action.payload.discount;
 
@@ -122,18 +123,19 @@ export const CartSlice: any = createSlice({
 				let discountUnit = 0;
 				let discountRange = 2;
 
-				// рубли
-				if (discount.typeValue === 1) {
-					const quantyProducts = state.products.reduce((sum, current) => sum + current.quanty, 0);
-					discountUnit = discount.value / quantyProducts;
-				}
+				const totalAmount = state.products.reduce((acc, product) => acc + product.price * product.quanty, 0);
 
-				// проценты
-				if (discount.typeValue === 2) {
-					discountUnit = discount.value;
-				}
+				state.products.map((product) => {
+					// рубли
+					if (discount.typeValue === 1) {
+						discountUnit = ((product.price * product.quanty) / totalAmount) * discount.value;
+					}
 
-				state.products.forEach((product) => {
+					// проценты
+					if (discount.typeValue === 2) {
+						discountUnit = discount.value;
+					}
+
 					state.productsDiscount[product.code] = {
 						value: discountUnit,
 						typeValue: discount.typeValue,
@@ -143,6 +145,7 @@ export const CartSlice: any = createSlice({
 			}
 		},
 
+		// удаление скидки "На весь заказ"
 		delDiscountCart(state) {
 			state.discountCart = null;
 			state.productsDiscount = {};

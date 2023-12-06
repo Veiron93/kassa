@@ -31,7 +31,7 @@ const Price = () => {
 			{/* <span className={styles.price}>Сумма: {sumPrice}</span> */}
 			{/* {discount > 0 && <span className={styles.discount}>Скидка: - {discount}</span>} */}
 			{/* <span className={styles.totalPrice}>Итого: {sumPrice - discount} р.</span> */}
-			<span className={styles.totalPrice}>{sumPrice - discount} &#8381;</span>
+			<span className={styles.totalPrice}>{(sumPrice - discount).toFixed(2)} &#8381;</span>
 		</div>
 	);
 };

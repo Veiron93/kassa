@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./discount.module.scss";
 
@@ -49,7 +49,6 @@ const Discount = () => {
 
 	function onValueDiscount(e: any) {
 		const element = e.target;
-
 		discount.value = Number(element.value);
 	}
 
@@ -90,7 +89,13 @@ const Discount = () => {
 	}
 
 	// кнопки в Modal
-	const btns = [{ name: "Удалить", code: "del" }];
+	const [btns, setBtns] = useState<any>([{ name: "Удалить", code: "del", state: discountCart ? true : false }]);
+
+	useEffect(() => {
+		let btnDelDiscountIndex = btns.findIndex((btn: any) => btn.code === "del");
+		btns[btnDelDiscountIndex].state = discountCart ? true : false;
+		setBtns(btns);
+	}, [discountCart]);
 
 	return (
 		<>
