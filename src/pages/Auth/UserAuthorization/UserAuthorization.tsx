@@ -50,7 +50,8 @@ const UserAuthorization = () => {
 		if (dataKassaJSON.token) {
 			getUsers(dataKassaJSON.token).then((response: any) => {
 				if (response) {
-					setUsers(response);
+					console.log(response.data);
+					setUsers(response.data);
 				}
 			});
 		}
@@ -94,6 +95,9 @@ const UserAuthorization = () => {
 				const user = {
 					id: response.id,
 					token: response.token,
+					// first_name: ,
+					// middle_name: ,
+					// last_name:
 				};
 
 				localStorage.setItem("user", JSON.stringify(user));
@@ -116,7 +120,7 @@ const UserAuthorization = () => {
 							key={user.id}
 							onClick={() => onSelectUser(user.id)}
 						>
-							{user.name}
+							{user.last_name + " " + user.first_name + " " + user.middle_name}
 						</div>
 					))}
 				</div>

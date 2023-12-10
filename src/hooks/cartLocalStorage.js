@@ -25,3 +25,9 @@ export function setCartLocalStore(products, productsDiscount, discountCart) {
 	//console.log(productsDiscount);
 	// console.log(discountCart);
 }
+
+export function getCartLocalStore() {
+	const cart = localStorage.getItem("cart");
+
+	return cart ? JSON.parse(cart) : null;
+}

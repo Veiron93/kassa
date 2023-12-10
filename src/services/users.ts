@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import UsersData from "@/data/users";
 
 export function userIsActive(data: any) {
@@ -20,7 +22,9 @@ export function getUser(userAuth: any) {
 }
 
 export function getUsers(tokenKassa: string) {
-	return new Promise((resolve) => {
-		resolve(UsersData.users);
+	return axios.get(process.env.REACT_APP_SERVER_LINK + "api/kassas/personal/", {
+		headers: {
+			"kassa-token": tokenKassa,
+		},
 	});
 }

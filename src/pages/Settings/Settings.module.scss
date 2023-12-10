@@ -1,0 +1,28 @@
+.settings {
+	padding: 10px;
+}
+.updateProducts {
+	padding: 10px;
+	background: #f3f3f3;
+	//border: 1px solid red;
+
+	button {
+		padding: 10px;
+	}
+
+	&Status {
+		margin-bottom: 10px;
+		font-size: 14px;
+	}
+}
+
+.kassaMode {
+	margin-top: 20px;
+	p {
+		margin-bottom: 5px;
+	}
+
+	button {
+		padding: 10px;
+	}
+}
