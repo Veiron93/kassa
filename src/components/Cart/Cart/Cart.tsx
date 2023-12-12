@@ -1,7 +1,7 @@
 import useDeepCompareEffect from "use-deep-compare-effect";
 
 // data
-import productsData from "@/data/products";
+import productsData from "@/data/catalog";
 
 // hooks
 import { getCartLocalStore, setCartLocalStore } from "@/hooks/cartLocalStorage";

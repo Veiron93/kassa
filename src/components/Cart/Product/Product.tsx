@@ -6,7 +6,7 @@ import styles from "./Product.module.scss";
 import { priceProduct } from "@/helpers/cart";
 
 // models
-import { ProductCart } from "@/models/products";
+import { ProductCart } from "@/models/catalog";
 
 //store
 import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";

@@ -1,4 +1,4 @@
-import { ProductCart, Discount } from "@/models/products";
+import { ProductCart, Discount } from "@/models/catalog";
 
 export function priceProduct(product: ProductCart, discount: Discount | null = null) {
 	let priceProduct: number = 0;

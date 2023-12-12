@@ -6,7 +6,7 @@ import styles from "./Settings.module.scss";
 import { db } from "@/db";
 
 // data
-import productsData from "@/data/products";
+import productsData from "@/data/catalog";
 
 interface statusUpdateProductsDB {
 	date: string;
@@ -55,7 +55,7 @@ const Settings = () => {
 			dataKassaLocalStorage = JSON.parse(dataKassaLocalStorage);
 		}
 
-		console.log(dataKassaLocalStorage);
+		//console.log(dataKassaLocalStorage);
 	}
 
 	return (

@@ -2,17 +2,13 @@ import { useEffect, useState } from "react";
 
 import styles from "./Catalog.module.scss";
 
-// data
-import products from "@/data/products";
-
 // models
-import { ProductCart, Product } from "@/models/products";
+import { ProductCart, Product } from "@/models/catalog";
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
 import { CartSlice } from "@/store/reducers/CartSlice";
-
-// components
+import { CatalogSlice } from "@/store/reducers/CatalogSlice";
 
 // ui-components
 import Icons from "@/ui-components/Icons/Icons";
@@ -24,6 +20,11 @@ const Catalog = () => {
 
 	// state
 	const { products: productsCart } = useAppSelector((state: any) => state.CartReducer);
+	const {
+		products: productsCatalog,
+		categories: categoriesCatalog,
+		favorites: favoritesCatalog,
+	} = useAppSelector((state: any) => state.CatalogReducer);
 
 	// actions
 	const { add, incrementQuanty } = CartSlice.actions;
@@ -96,20 +97,26 @@ const Catalog = () => {
 					<span>Избранное</span>
 				</div>
 
-				{products.products.map((product: any) => (
-					<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product)}>
-						<div className={styles.catalogProductName}>{product.name}</div>
-						<div className={styles.catalogProductInfo}>
-							<div className={styles.price}>{product.price} &#8381;</div>
+				<div className={styles.catalogProductFreePrice}>
+					{/* <img src={Icons.star} alt="" /> */}
+					<span>Продажа по свободной цене</span>
+				</div>
 
-							{product.skus ? (
-								<div className={styles.catalogProductFlag}>{product.skus.length}</div>
-							) : (
-								<div className={styles.leftover}>{product.leftover} шт.</div>
-							)}
+				{productsCatalog &&
+					productsCatalog.map((product: any) => (
+						<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product)}>
+							<div className={styles.catalogProductName}>{product.name}</div>
+							<div className={styles.catalogProductInfo}>
+								<div className={styles.price}>{product.price} &#8381;</div>
+
+								{product.skus ? (
+									<div className={styles.catalogProductFlag}>{product.skus.length}</div>
+								) : (
+									<div className={styles.leftover}>{product.leftover} шт.</div>
+								)}
+							</div>
 						</div>
-					</div>
-				))}
+					))}
 			</div>
 
 			{/* SKUS */}

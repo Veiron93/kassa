@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./ProductCard.module.scss";
 
 // models
-import { Product } from "@/models/products";
+import { Product } from "@/models/catalog";
 
 //store
 import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";

@@ -23,6 +23,20 @@
 		}
 	}
 
+	&ProductFreePrice {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		background: #facb17;
+		background: linear-gradient(45deg, rgba(250, 205, 23, 1) 0%, rgba(235, 153, 30, 1) 100%);
+
+		span {
+			text-align: center;
+		}
+	}
+
 	&Product {
 		background: #ffffff;
 

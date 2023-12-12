@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { CartProductContext } from "@/contexts/CartProductContext";
 
 // models
-import { ProductCart } from "@/models/products";
+import { ProductCart } from "@/models/catalog";
 
 // services
-import { getProduct } from "@/services/products";
+import { getProduct } from "@/services/catalog";
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
