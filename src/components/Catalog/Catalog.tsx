@@ -30,6 +30,24 @@ const Catalog = () => {
 	const { add, incrementQuanty } = CartSlice.actions;
 	// --
 
+	// режимы каталога
+	const [catalogMode, setCatalogMode] = useState<number>(1);
+
+	const catalogSections = [
+		{
+			code: "catalog",
+			name: "Каталог",
+			icon: Icons.settings,
+			className: styles.itemCatalog,
+		},
+		{
+			code: "favorites",
+			name: "Избранное",
+			icon: Icons.star,
+			className: styles.itemFavorites,
+		},
+	];
+
 	const [stateSkusModal, setStateSkusModal] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<any>(null);
 
@@ -92,31 +110,39 @@ const Catalog = () => {
 	return (
 		<>
 			<div className={styles.catalog}>
-				<div className={styles.catalogType}>
-					<img src={Icons.star} alt="" />
-					<span>Избранное</span>
-				</div>
-
-				<div className={styles.catalogProductFreePrice}>
-					{/* <img src={Icons.star} alt="" /> */}
-					<span>Продажа по свободной цене</span>
-				</div>
-
-				{productsCatalog &&
-					productsCatalog.map((product: any) => (
-						<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product)}>
-							<div className={styles.catalogProductName}>{product.name}</div>
-							<div className={styles.catalogProductInfo}>
-								<div className={styles.price}>{product.price} &#8381;</div>
-
-								{product.skus ? (
-									<div className={styles.catalogProductFlag}>{product.skus.length}</div>
-								) : (
-									<div className={styles.leftover}>{product.leftover} шт.</div>
-								)}
+				<div className={styles.catalogHeader}>
+					{catalogSections &&
+						catalogSections.map((section) => (
+							<div className={`${styles.catalogHeaderItem} ${section.className}`} key={section.code}>
+								<img src={section.icon} />
+								<span>{section.name}</span>
 							</div>
-						</div>
-					))}
+						))}
+
+					<div className={`${styles.catalogHeaderItem} ${styles.itemCatalogSaleFreePrice}`}>
+						<span>
+							Продажа по <br /> свободной цене
+						</span>
+					</div>
+				</div>
+
+				<div className={styles.catalogList}>
+					{productsCatalog &&
+						productsCatalog.map((product: any) => (
+							<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product)}>
+								<div className={styles.catalogProductName}>{product.name}</div>
+								<div className={styles.catalogProductInfo}>
+									<div className={styles.price}>{product.price} &#8381;</div>
+
+									{product.skus ? (
+										<div className={styles.catalogProductFlag}>{product.skus.length}</div>
+									) : (
+										<div className={styles.leftover}>{product.leftover} шт.</div>
+									)}
+								</div>
+							</div>
+						))}
+				</div>
 			</div>
 
 			{/* SKUS */}
