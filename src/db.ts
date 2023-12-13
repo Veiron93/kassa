@@ -14,7 +14,7 @@ export class MySubClassedDexie extends Dexie {
 		this.version(1).stores({
 			products: "++id, code",
 			categories: "++id, id",
-			favorites: "++id, identificator",
+			favorites: "++id, position",
 		});
 	}
 }

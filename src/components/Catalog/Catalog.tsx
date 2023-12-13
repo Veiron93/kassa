@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import styles from "./Catalog.module.scss";
 
 // models
-import { ProductCart, Product } from "@/models/catalog";
+import { ProductCart, Product, Category, ProductFavorite, Favorite } from "@/models/catalog";
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
 import { CartSlice } from "@/store/reducers/CartSlice";
 import { CatalogSlice } from "@/store/reducers/CatalogSlice";
+
+// components
+import ProductCatalog from "@/components/Catalog/ProductCatalog/ProductCatalog";
 
 // ui-components
 import Icons from "@/ui-components/Icons/Icons";
@@ -20,6 +23,7 @@ const Catalog = () => {
 
 	// state
 	const { products: productsCart } = useAppSelector((state: any) => state.CartReducer);
+
 	const {
 		products: productsCatalog,
 		categories: categoriesCatalog,
@@ -30,9 +34,7 @@ const Catalog = () => {
 	const { add, incrementQuanty } = CartSlice.actions;
 	// --
 
-	// режимы каталога
-	const [catalogMode, setCatalogMode] = useState<number>(1);
-
+	// раздел каталога
 	const catalogSections = [
 		{
 			code: "catalog",
@@ -48,6 +50,36 @@ const Catalog = () => {
 		},
 	];
 
+	const [catalogSection, setCatalogSection] = useState<string>(catalogSections[0].code);
+	// --
+
+	// избранное
+	const [itemsCatalogFavorites, setItemsCatalogFavorites] = useState<Array<Product | Category> | []>([]);
+
+	useEffect(() => {
+		let items: Array<ProductFavorite | Category> = [];
+
+		if (favoritesCatalog.length > 0) {
+			favoritesCatalog.forEach((item: Favorite) => {
+				// продукт
+				if (item.type === 1) {
+					let product: ProductFavorite = productsCatalog.find((product: Product) => product.code === item.idItem);
+
+					if (product) {
+						items.push({ ...product, type: 1, position: item.position });
+					}
+				}
+
+				// категория
+				if (item.type === 2) {
+				}
+			});
+		}
+
+		setItemsCatalogFavorites(items);
+	}, [favoritesCatalog]);
+	// --
+
 	const [stateSkusModal, setStateSkusModal] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<any>(null);
 
@@ -62,6 +94,10 @@ const Catalog = () => {
 	}, [selectedItem]);
 
 	function selectProduct(product: Product) {
+		setSelectedItem(product);
+	}
+
+	function handlerSelectProduct(product: Product) {
 		setSelectedItem(product);
 	}
 
@@ -87,8 +123,10 @@ const Catalog = () => {
 			}
 
 			let item: ProductCart = {
+				id: product.id,
 				name: product.name,
 				code: product.code,
+				categoryId: product.categoryId,
 				quanty: 1,
 				price: product.price,
 				leftover: product.leftover,
@@ -113,7 +151,11 @@ const Catalog = () => {
 				<div className={styles.catalogHeader}>
 					{catalogSections &&
 						catalogSections.map((section) => (
-							<div className={`${styles.catalogHeaderItem} ${section.className}`} key={section.code}>
+							<div
+								className={`${styles.catalogHeaderItem} ${section.className}`}
+								key={section.code}
+								onClick={() => setCatalogSection(section.code)}
+							>
 								<img src={section.icon} />
 								<span>{section.name}</span>
 							</div>
@@ -121,28 +163,45 @@ const Catalog = () => {
 
 					<div className={`${styles.catalogHeaderItem} ${styles.itemCatalogSaleFreePrice}`}>
 						<span>
-							Продажа по <br /> свободной цене
+							Продажа по <br /> свободной <br /> цене
 						</span>
 					</div>
 				</div>
 
-				<div className={styles.catalogList}>
-					{productsCatalog &&
-						productsCatalog.map((product: any) => (
-							<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product)}>
-								<div className={styles.catalogProductName}>{product.name}</div>
-								<div className={styles.catalogProductInfo}>
-									<div className={styles.price}>{product.price} &#8381;</div>
+				{/* каталог */}
+				{catalogSection === "catalog" && (
+					<div className={styles.catalogList}>
+						{productsCatalog &&
+							productsCatalog.map((product: any) => (
+								<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product)}>
+									<div className={styles.catalogProductName}>{product.name}</div>
+									<div className={styles.catalogProductInfo}>
+										<div className={styles.price}>{product.price} &#8381;</div>
 
-									{product.skus ? (
-										<div className={styles.catalogProductFlag}>{product.skus.length}</div>
-									) : (
-										<div className={styles.leftover}>{product.leftover} шт.</div>
-									)}
+										{product.skus ? (
+											<div className={styles.catalogProductFlag}>{product.skus.length}</div>
+										) : (
+											<div className={styles.leftover}>{product.leftover} шт.</div>
+										)}
+									</div>
 								</div>
-							</div>
-						))}
-				</div>
+							))}
+					</div>
+				)}
+
+				{/* избранное */}
+				{catalogSection === "favorites" && (
+					<div className={styles.favoritesList}>
+						{itemsCatalogFavorites &&
+							itemsCatalogFavorites.map((item: any) =>
+								item.type === 1 ? (
+									<ProductCatalog product={item} key={item.id} onClick={handlerSelectProduct} />
+								) : (
+									<p key={item.idItem}>2</p>
+								)
+							)}
+					</div>
+				)}
 			</div>
 
 			{/* SKUS */}

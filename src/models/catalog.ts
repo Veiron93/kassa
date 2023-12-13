@@ -5,22 +5,29 @@ export interface Discount {
 }
 
 export interface Product {
+	id: number;
 	code: string;
 	name: string;
 	price: number;
 	leftover: number;
+	categoryId?: number | null;
 	skus?: Array<Product>;
+}
+
+export interface ProductFavorite extends Product {
+	type: number;
+	position: number;
 }
 
 export interface Category {
 	id: number;
 	name: string;
-	parent_id: number | null;
+	parentId: number | null;
 }
 
 export interface Favorite {
 	type: number;
-	identificator: string | number;
+	idItem: string | number;
 	position: number;
 }
 

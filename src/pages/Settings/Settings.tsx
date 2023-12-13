@@ -21,13 +21,11 @@ const Settings = () => {
 	}, []);
 
 	async function updateProducts() {
-		await db.products.clear();
-
-		let statusUpdadeProducts = false;
-		await db.products.bulkAdd(productsData.products).then(() => (statusUpdadeProducts = true));
-
-		onStatusUpdateProductsDB(statusUpdadeProducts);
-		setStatusUpdateDB(getStatusUpdateProductsDB());
+		// await db.products.clear();
+		// let statusUpdadeProducts = false;
+		// await db.products.bulkAdd(productsData.products).then(() => (statusUpdadeProducts = true));
+		// onStatusUpdateProductsDB(statusUpdadeProducts);
+		// setStatusUpdateDB(getStatusUpdateProductsDB());
 	}
 
 	function onStatusUpdateProductsDB(status: boolean) {
