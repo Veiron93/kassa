@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./Catalog.module.scss";
 
 // models
-import { ProductCart, Product, Category, ProductFavorite, Favorite } from "@/models/catalog";
+import { ProductCart, Product, Category, ProductFavorite, CategoryFavorite, Favorite } from "@/models/catalog";
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
@@ -12,10 +12,12 @@ import { CatalogSlice } from "@/store/reducers/CatalogSlice";
 
 // components
 import ProductCatalog from "@/components/Catalog/ProductCatalog/ProductCatalog";
+import CategoryCatalog from "@/components/Catalog/CategoryCatalog/CategoryCatalog";
 
 // ui-components
 import Icons from "@/ui-components/Icons/Icons";
 import Modal from "@/ui-components/Modal/Modal";
+import { getProduct } from "@/services/catalog";
 
 const Catalog = () => {
 	// STORE
@@ -54,30 +56,47 @@ const Catalog = () => {
 	// --
 
 	// избранное
-	const [itemsCatalogFavorites, setItemsCatalogFavorites] = useState<Array<Product | Category> | []>([]);
+	const [itemsCatalogFavorites, setItemsCatalogFavorites] = useState<Array<ProductFavorite | CategoryFavorite | null> | []>([]);
 
-	useEffect(() => {
-		let items: Array<ProductFavorite | Category> = [];
+	async function initGridFavorites() {
+		let items: Array<ProductFavorite> = [];
+		let maxPosition = 1;
 
-		if (favoritesCatalog.length > 0) {
-			favoritesCatalog.forEach((item: Favorite) => {
-				// продукт
-				if (item.type === 1) {
-					let product: ProductFavorite = productsCatalog.find((product: Product) => product.code === item.idItem);
+		for await (let item of favoritesCatalog) {
+			if (item.position > maxPosition) maxPosition = item.position;
 
-					if (product) {
-						items.push({ ...product, type: 1, position: item.position });
+			if (item.type === 1) {
+				getProduct(item.idItem).then((response) => {
+					if (response) {
+						let product: ProductFavorite = {
+							...response,
+							position: item.position,
+							type: item.type,
+						};
+
+						items.push(product);
 					}
-				}
-
-				// категория
-				if (item.type === 2) {
-				}
-			});
+				});
+			}
 		}
 
-		setItemsCatalogFavorites(items);
+		let quantityRows = Math.ceil(maxPosition / 5);
+
+		let grid: Array<ProductFavorite | CategoryFavorite | null> = Array(quantityRows * 5).fill(null);
+
+		for await (let item of items) {
+			grid[item.position] = item;
+		}
+
+		setItemsCatalogFavorites(grid);
+	}
+
+	useEffect(() => {
+		if (favoritesCatalog.length > 0) {
+			initGridFavorites();
+		}
 	}, [favoritesCatalog]);
+
 	// --
 
 	const [stateSkusModal, setStateSkusModal] = useState<boolean>(false);
@@ -168,36 +187,27 @@ const Catalog = () => {
 					</div>
 				</div>
 
-				{/* каталог */}
+				{/* основной раздел */}
 				{catalogSection === "catalog" && (
 					<div className={styles.catalogList}>
 						{productsCatalog &&
 							productsCatalog.map((product: any) => (
-								<div className={styles.catalogProduct} key={product.code} onClick={() => selectProduct(product)}>
-									<div className={styles.catalogProductName}>{product.name}</div>
-									<div className={styles.catalogProductInfo}>
-										<div className={styles.price}>{product.price} &#8381;</div>
-
-										{product.skus ? (
-											<div className={styles.catalogProductFlag}>{product.skus.length}</div>
-										) : (
-											<div className={styles.leftover}>{product.leftover} шт.</div>
-										)}
-									</div>
-								</div>
+								<ProductCatalog product={product} key={product.id} onClick={handlerSelectProduct} />
 							))}
 					</div>
 				)}
 
 				{/* избранное */}
 				{catalogSection === "favorites" && (
-					<div className={styles.favoritesList}>
+					<div className={`${styles.favoritesList} ${styles.catalogList}`}>
 						{itemsCatalogFavorites &&
 							itemsCatalogFavorites.map((item: any) =>
-								item.type === 1 ? (
+								item && item.type === 1 ? (
 									<ProductCatalog product={item} key={item.id} onClick={handlerSelectProduct} />
+								) : item && item.type === 2 ? (
+									<CategoryCatalog key={item.id} />
 								) : (
-									<p key={item.idItem}>2</p>
+									<div className={styles.emptyCell}></div>
 								)
 							)}
 					</div>

@@ -40,6 +40,8 @@ const catalog = {
 
 	favorites: [
 		{ type: 1, idItem: "23223232", position: 1 },
+		{ type: 1, idItem: "3232223", position: 27 },
+		{ type: 1, idItem: "6932172606909", position: 9 },
 		{ type: 2, idItem: 2, position: 3 },
 	],
 };

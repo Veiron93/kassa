@@ -25,6 +25,11 @@ export interface Category {
 	parentId: number | null;
 }
 
+export interface CategoryFavorite extends Category {
+	type: number;
+	position: number;
+}
+
 export interface Favorite {
 	type: number;
 	idItem: string | number;
