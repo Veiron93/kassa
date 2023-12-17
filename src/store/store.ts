@@ -7,6 +7,7 @@ import ProductDiscountReducer from "./reducers/ProductDiscountSlice";
 import CartDiscountReducer from "./reducers/CartDiscountSlice";
 import CatalogReducer from "./reducers/CatalogSlice";
 import UsersReducer from "./reducers/UsersSlice";
+import SaleFreePriceReducer from "./reducers/SaleFreePrice";
 
 const rootReducer = combineReducers({
 	CodeProductReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
 	CartDiscountReducer,
 	UsersReducer,
 	CatalogReducer,
+	SaleFreePriceReducer,
 });
 
 export const setupStore = () => {

@@ -1,3 +1,9 @@
+.catalog {
+	//border: 1px solid red;
+	height: 100%;
+	overflow: hidden;
+}
+
 .catalogHeader {
 	display: flex;
 	column-gap: 2px;
@@ -13,7 +19,7 @@
 		row-gap: 2px;
 
 		height: 70px;
-		min-width: 110px;
+		min-width: 120px;
 		max-width: 160px;
 		padding: 10px;
 
@@ -42,6 +48,9 @@
 }
 
 .catalogList {
+	max-height: calc(100% - 80px);
+	//height: 100%;
+	//border: 1px solid;
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	align-content: flex-start;
@@ -52,6 +61,57 @@
 		cursor: pointer;
 		user-select: none;
 	}
+
+	.currentCaregory {
+		height: 110px;
+		background: #ffffff;
+		padding: 5px;
+		display: flex;
+		flex-direction: column;
+
+		> div {
+		}
+
+		&Name {
+			display: flex;
+			column-gap: 2px;
+			img {
+				height: 14px;
+				margin-top: 2px;
+			}
+
+			span {
+				font-size: 14px;
+				font-weight: 500;
+			}
+		}
+
+		&Info {
+			margin-top: auto;
+			display: flex;
+			column-gap: 5px;
+
+			div {
+				display: flex;
+				align-items: center;
+				column-gap: 4px;
+
+				&:nth-child(2) {
+					font-size: 12px;
+				}
+
+				img {
+					height: 15px;
+					display: block;
+				}
+
+				span {
+					line-height: 1em;
+					font-size: 15px;
+				}
+			}
+		}
+	}
 }
 
 // избранное
@@ -60,7 +120,7 @@
 
 	.emptyCell {
 		height: 110px;
-		background: #cbcbcb;
+		background: #dfdfdf;
 	}
 }
 
@@ -91,6 +151,26 @@
 				width: 85px;
 				margin-left: 20px;
 				text-align: right;
+			}
+		}
+	}
+}
+
+// продажа по свободной цене
+.saleFreePrice {
+	&Form {
+		.formRow {
+			&:nth-child(1) {
+				margin-bottom: 10px;
+			}
+
+			label {
+				display: block;
+				margin-bottom: 5px;
+			}
+
+			input {
+				width: 100%;
 			}
 		}
 	}

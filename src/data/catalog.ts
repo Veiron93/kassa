@@ -36,6 +36,10 @@ const catalog = {
 		{ id: 2, name: "Смартфоны", parentId: null },
 		{ id: 3, name: "Компьютеры", parentId: null },
 		{ id: 9, name: "OBD2 сканеры", parentId: 1 },
+		{ id: 11, name: "Наушники", parentId: 2 },
+		{ id: 12, name: "Чехлы", parentId: 2 },
+		{ id: 13, name: "Защитные стёкла", parentId: 2 },
+		{ id: 14, name: "Аудио", parentId: 1 },
 	],
 
 	favorites: [

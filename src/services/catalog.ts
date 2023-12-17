@@ -32,6 +32,13 @@ export function getCategoriesCatalog(): Promise<Category[]> {
 		resolve(catalog.categories);
 	});
 }
+
+export function getCategory(id: number): Promise<Category | undefined> {
+	return new Promise((resolve) => {
+		let category = catalog.categories.find((category) => category.id === id);
+		resolve(category);
+	});
+}
 // --
 
 // FAVORITES

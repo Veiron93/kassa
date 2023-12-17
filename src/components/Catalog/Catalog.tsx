@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import styles from "./Catalog.module.scss";
 
@@ -7,8 +7,12 @@ import { ProductCart, Product, Category, ProductFavorite, CategoryFavorite, Favo
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
+
 import { CartSlice } from "@/store/reducers/CartSlice";
 import { CatalogSlice } from "@/store/reducers/CatalogSlice";
+
+// services
+import { getProduct, getCategory } from "@/services/catalog";
 
 // components
 import ProductCatalog from "@/components/Catalog/ProductCatalog/ProductCatalog";
@@ -17,7 +21,7 @@ import CategoryCatalog from "@/components/Catalog/CategoryCatalog/CategoryCatalo
 // ui-components
 import Icons from "@/ui-components/Icons/Icons";
 import Modal from "@/ui-components/Modal/Modal";
-import { getProduct } from "@/services/catalog";
+import catalog from "@/data/catalog";
 
 const Catalog = () => {
 	// STORE
@@ -39,12 +43,14 @@ const Catalog = () => {
 	// раздел каталога
 	const catalogSections = [
 		{
+			id: 1,
 			code: "catalog",
 			name: "Каталог",
-			icon: Icons.settings,
+			icon: Icons.catalog,
 			className: styles.itemCatalog,
 		},
 		{
+			id: 2,
 			code: "favorites",
 			name: "Избранное",
 			icon: Icons.star,
@@ -52,14 +58,58 @@ const Catalog = () => {
 		},
 	];
 
-	const [catalogSection, setCatalogSection] = useState<string>(catalogSections[0].code);
+	const [currentCatalogSectionId, setCurrentCatalogSectionId] = useState<number>(catalogSections[0].id);
 	// --
+
+	// переключение раздела каталога
+	function selectCatalogSection(id: number) {
+		if (id === currentCatalogSectionId) {
+			handlerSelectCategory(null);
+		}
+
+		setCurrentCatalogSectionId(id);
+	}
+
+	// каталог
+	const [itemsCatalog, setItemsCatalog] = useState<Array<Product[] | Category[]> | []>([]);
+	const [currentCategory, setCurrenCategory] = useState<Category | null>();
+
+	function handlerSelectCategory(categoryId: number | null = null) {
+		let categories: Category[] = [];
+		let products: Product[] = [];
+
+		categories = catalog.categories.filter((category) => category.parentId === categoryId);
+		products = catalog.products.filter((product) => product.categoryId === categoryId);
+
+		// текущая категория
+		if (categoryId) {
+			let currentCategory = catalog.categories.find((category) => category.id === categoryId);
+			setCurrenCategory(currentCategory);
+		} else {
+			setCurrenCategory(null);
+		}
+
+		setItemsCatalog([categories, products]);
+
+		if (currentCatalogSectionId !== catalogSections[0].id) {
+			selectCatalogSection(catalogSections[0].id);
+		}
+	}
+
+	function backCatalog() {
+		let idParentCategory = currentCategory ? currentCategory.parentId : null;
+		handlerSelectCategory(idParentCategory);
+	}
+
+	useEffect(() => {
+		handlerSelectCategory();
+	}, []);
 
 	// избранное
 	const [itemsCatalogFavorites, setItemsCatalogFavorites] = useState<Array<ProductFavorite | CategoryFavorite | null> | []>([]);
 
 	async function initGridFavorites() {
-		let items: Array<ProductFavorite> = [];
+		let items: Array<ProductFavorite | CategoryFavorite> = [];
 		let maxPosition = 1;
 
 		for await (let item of favoritesCatalog) {
@@ -78,6 +128,20 @@ const Catalog = () => {
 					}
 				});
 			}
+
+			if (item.type === 2) {
+				getCategory(item.idItem).then((response) => {
+					if (response) {
+						let category: CategoryFavorite = {
+							...response,
+							position: item.position,
+							type: item.type,
+						};
+
+						items.push(category);
+					}
+				});
+			}
 		}
 
 		let quantityRows = Math.ceil(maxPosition / 5);
@@ -85,7 +149,7 @@ const Catalog = () => {
 		let grid: Array<ProductFavorite | CategoryFavorite | null> = Array(quantityRows * 5).fill(null);
 
 		for await (let item of items) {
-			grid[item.position] = item;
+			grid[item.position - 1] = item;
 		}
 
 		setItemsCatalogFavorites(grid);
@@ -111,10 +175,6 @@ const Catalog = () => {
 			}
 		}
 	}, [selectedItem]);
-
-	function selectProduct(product: Product) {
-		setSelectedItem(product);
-	}
 
 	function handlerSelectProduct(product: Product) {
 		setSelectedItem(product);
@@ -164,55 +224,105 @@ const Catalog = () => {
 		setSelectedItem(null);
 	}
 
+	// Продажа по свободной цене
+	const [stateModalSaleFreePrice, setStateModalSaleFreePrice] = useState<boolean>(false);
+
+	const nameProductSaleFreePriceRef = useRef<HTMLInputElement | null>(null);
+	const priceProductSaleFreePriceRef = useRef<HTMLInputElement | null>(null);
+
+	function onSelectNameSaleFreePrice() {
+		//console.log(nameProductSaleFreePriceRef.current);
+
+		if (nameProductSaleFreePriceRef.current) {
+			nameProductSaleFreePriceRef.current.select();
+		}
+	}
+
+	function validationSaleFreePrice() {}
+
+	function handlerCompleteSaleFreePrice() {
+		setStateModalSaleFreePrice(false);
+	}
+	// --
+
 	return (
-		<>
-			<div className={styles.catalog}>
-				<div className={styles.catalogHeader}>
-					{catalogSections &&
-						catalogSections.map((section) => (
-							<div
-								className={`${styles.catalogHeaderItem} ${section.className}`}
-								key={section.code}
-								onClick={() => setCatalogSection(section.code)}
-							>
-								<img src={section.icon} />
-								<span>{section.name}</span>
+		<div className={styles.catalog}>
+			<div className={styles.catalogHeader}>
+				{catalogSections &&
+					catalogSections.map((section) => (
+						<div
+							className={`${styles.catalogHeaderItem} ${section.className}`}
+							key={section.code}
+							onClick={() => selectCatalogSection(section.id)}
+						>
+							<img src={section.icon} />
+							<span>{section.name}</span>
+						</div>
+					))}
+
+				<div className={`${styles.catalogHeaderItem} ${styles.itemCatalogSaleFreePrice}`} onClick={() => setStateModalSaleFreePrice(true)}>
+					<span>
+						Продажа по <br /> свободной <br /> цене
+					</span>
+				</div>
+			</div>
+
+			{/* основной раздел */}
+			{currentCatalogSectionId === 1 && itemsCatalog && (
+				<div className={styles.catalogList}>
+					{/* кнопка назад */}
+					{currentCategory && (
+						<div className={styles.currentCaregory} onClick={backCatalog}>
+							<div className={styles.currentCaregoryName}>
+								<img src={Icons.back} alt="" />
+								<span>{currentCategory.name}</span>
 							</div>
+
+							<div className={styles.currentCaregoryInfo}>
+								<div>
+									<img src={Icons.catalog} alt="" />
+									<span>{itemsCatalog[0].length}</span>
+								</div>
+								<div>|</div>
+								<div>
+									<img src={Icons.catalog} alt="" />
+									<span>{itemsCatalog[1].length}</span>
+								</div>
+							</div>
+						</div>
+					)}
+
+					{/* категории */}
+					{itemsCatalog[0] &&
+						itemsCatalog[0].map((item: any) => (
+							<CategoryCatalog category={item} key={item.id} onClick={() => handlerSelectCategory(item.id)} />
 						))}
 
-					<div className={`${styles.catalogHeaderItem} ${styles.itemCatalogSaleFreePrice}`}>
-						<span>
-							Продажа по <br /> свободной <br /> цене
-						</span>
-					</div>
+					{/* товары */}
+					{itemsCatalog[1] &&
+						itemsCatalog[1].map((item: any) => <ProductCatalog product={item} key={item.id} onClick={handlerSelectProduct} />)}
 				</div>
+			)}
 
-				{/* основной раздел */}
-				{catalogSection === "catalog" && (
-					<div className={styles.catalogList}>
-						{productsCatalog &&
-							productsCatalog.map((product: any) => (
-								<ProductCatalog product={product} key={product.id} onClick={handlerSelectProduct} />
-							))}
-					</div>
-				)}
+			{currentCatalogSectionId === 1 && itemsCatalog[0] && itemsCatalog[0].length === 0 && itemsCatalog[1] && itemsCatalog[1].length === 0 && (
+				<p>пусто</p>
+			)}
 
-				{/* избранное */}
-				{catalogSection === "favorites" && (
-					<div className={`${styles.favoritesList} ${styles.catalogList}`}>
-						{itemsCatalogFavorites &&
-							itemsCatalogFavorites.map((item: any) =>
-								item && item.type === 1 ? (
-									<ProductCatalog product={item} key={item.id} onClick={handlerSelectProduct} />
-								) : item && item.type === 2 ? (
-									<CategoryCatalog key={item.id} />
-								) : (
-									<div className={styles.emptyCell}></div>
-								)
-							)}
-					</div>
-				)}
-			</div>
+			{/* избранное */}
+			{currentCatalogSectionId === 2 && (
+				<div className={`${styles.favoritesList} ${styles.catalogList}`}>
+					{itemsCatalogFavorites &&
+						itemsCatalogFavorites.map((item: any, index) =>
+							item && item.type === 1 ? (
+								<ProductCatalog product={item} key={index} onClick={handlerSelectProduct} />
+							) : item && item.type === 2 ? (
+								<CategoryCatalog category={item} key={index} onClick={() => handlerSelectCategory(item.id)} />
+							) : (
+								<div className={styles.emptyCell} key={index}></div>
+							)
+						)}
+				</div>
+			)}
 
 			{/* SKUS */}
 			<Modal onComplete={handlerCompleteModal} state={stateSkusModal} btnOkName="Готово" title="Артикулы" stateBtnCancel={false}>
@@ -230,7 +340,29 @@ const Catalog = () => {
 					</div>
 				</div>
 			</Modal>
-		</>
+
+			{/* продажа по свободной цене */}
+			<Modal
+				onComplete={handlerCompleteSaleFreePrice}
+				state={stateModalSaleFreePrice}
+				btnOkName="Добавить"
+				title="Продажа товара по свободной цене"
+			>
+				<div className={styles.saleFreePrice}>
+					<div className={styles.saleFreePriceForm}>
+						<div className={styles.formRow} onClick={onSelectNameSaleFreePrice}>
+							<label>Название</label>
+							<input ref={nameProductSaleFreePriceRef} type="text" defaultValue="Товар по свободной цене" />
+						</div>
+
+						<div className={styles.formRow}>
+							<label htmlFor="priceProductSaleFreePriceRef">Стоимость</label>
+							<input id="priceProductSaleFreePriceRef" ref={priceProductSaleFreePriceRef} type="number" />
+						</div>
+					</div>
+				</div>
+			</Modal>
+		</div>
 	);
 };
 

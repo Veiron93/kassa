@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styles from "./ProductCatalog.module.scss";
 
 // models
@@ -11,12 +10,6 @@ interface propsProductCatalog {
 }
 
 const ProductCatalog = (props: propsProductCatalog) => {
-	// const [product, setProduct] = useState<Product | null>(null);
-
-	// useEffect(()=>{
-
-	// }, [])
-
 	function handlerClick(product: Product) {
 		props.onClick(product);
 	}

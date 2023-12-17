@@ -1,3 +1,9 @@
 .categoryCatalog {
-	border: 1px solid red;
+	background: #a7d2f5;
+	height: 110px;
+	padding: 10px;
+
+	&Name {
+		font-size: 16px;
+	}
 }
