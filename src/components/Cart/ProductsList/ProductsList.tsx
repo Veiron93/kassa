@@ -26,7 +26,7 @@ const List = () => {
 	const { products, stateAddProducts, discountCart } = useAppSelector((state: any) => state.CartReducer);
 
 	// actions
-	const { add, addDiscountCart, incrementQuanty } = CartSlice.actions;
+	const { add, addDiscountCart, incrementQuantity } = CartSlice.actions;
 	// --
 
 	useEffect(() => {
@@ -72,7 +72,7 @@ const List = () => {
 
 		// если товар есть в списке, то увеличиваем его количество на 1
 		if (isAdded !== -1) {
-			dispatch(incrementQuanty(code));
+			dispatch(incrementQuantity(code));
 		}
 
 		// если товара нет в списке, то добавляем
@@ -81,7 +81,7 @@ const List = () => {
 				if (response) {
 					let product: ProductCart;
 					product = Object.assign(response);
-					product.quanty = 1;
+					product.quantity = 1;
 					dispatch(add(product));
 				} else {
 					console.log("товар не найден в базе");

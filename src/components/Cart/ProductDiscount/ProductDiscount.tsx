@@ -136,7 +136,7 @@ const ProductDiscount = () => {
 
 	useEffect(() => {
 		if (product) {
-			setMaxDiscount(product.price * product.quanty - 1);
+			setMaxDiscount(product.price * product.quantity - 1);
 		}
 	}, [product]);
 

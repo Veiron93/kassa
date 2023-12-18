@@ -66,27 +66,27 @@ export const CartSlice: any = createSlice({
 		},
 
 		// изменить количество
-		changeQuanty(state, action) {
+		changeQuantity(state, action) {
 			const codeProduct = action.payload.code;
-			const quanty = action.payload.quanty;
+			const quantity = action.payload.quantity;
 
 			const product: ProductCart | undefined = state.products?.find((product: ProductCart) => product.code === codeProduct);
 
 			if (product) {
-				if (quanty > product.leftover) {
-					product.quanty = product.leftover;
+				if (quantity > product.leftover) {
+					product.quantity = product.leftover;
 				} else {
-					product.quanty = quanty;
+					product.quantity = quantity;
 				}
 			}
 		},
 
-		incrementQuanty(state, action) {
+		incrementQuantity(state, action) {
 			const codeProduct = action.payload;
 			const product: ProductCart | undefined = state.products?.find((product: ProductCart) => product.code === codeProduct);
 
-			if (product && product.quanty < product.leftover) {
-				product.quanty = product.quanty + 1;
+			if (product && product.quantity < product.leftover) {
+				product.quantity = product.quantity + 1;
 			}
 		},
 
@@ -123,12 +123,12 @@ export const CartSlice: any = createSlice({
 				let discountUnit = 0;
 				let discountRange = 2;
 
-				const totalAmount = state.products.reduce((acc, product) => acc + product.price * product.quanty, 0);
+				const totalAmount = state.products.reduce((acc, product) => acc + product.price * product.quantity, 0);
 
 				state.products.map((product) => {
 					// рубли
 					if (discount.typeValue === 1) {
-						discountUnit = ((product.price * product.quanty) / totalAmount) * discount.value;
+						discountUnit = ((product.price * product.quantity) / totalAmount) * discount.value;
 					}
 
 					// проценты

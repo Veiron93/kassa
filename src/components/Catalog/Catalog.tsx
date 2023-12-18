@@ -37,7 +37,7 @@ const Catalog = () => {
 	} = useAppSelector((state: any) => state.CatalogReducer);
 
 	// actions
-	const { add, incrementQuanty } = CartSlice.actions;
+	const { add, incrementQuantity } = CartSlice.actions;
 	// --
 
 	// раздел каталога
@@ -190,7 +190,7 @@ const Catalog = () => {
 
 		// если есть в корзине, то увеличиваем количество на 1
 		if (isCart !== -1) {
-			dispatch(incrementQuanty(code));
+			dispatch(incrementQuantity(code));
 		}
 
 		// добавляем товар в корзину
@@ -206,7 +206,7 @@ const Catalog = () => {
 				name: product.name,
 				code: product.code,
 				categoryId: product.categoryId,
-				quanty: 1,
+				quantity: 1,
 				price: product.price,
 				leftover: product.leftover,
 			};
@@ -226,22 +226,62 @@ const Catalog = () => {
 
 	// Продажа по свободной цене
 	const [stateModalSaleFreePrice, setStateModalSaleFreePrice] = useState<boolean>(false);
+	const [errorModalSaleFreePrice, setErrorModalSaleFreePrice] = useState<string | null>(null);
 
 	const nameProductSaleFreePriceRef = useRef<HTMLInputElement | null>(null);
 	const priceProductSaleFreePriceRef = useRef<HTMLInputElement | null>(null);
 
 	function onSelectNameSaleFreePrice() {
-		//console.log(nameProductSaleFreePriceRef.current);
-
 		if (nameProductSaleFreePriceRef.current) {
 			nameProductSaleFreePriceRef.current.select();
 		}
 	}
 
-	function validationSaleFreePrice() {}
+	function validationSaleFreePrice(): boolean {
+		if (nameProductSaleFreePriceRef.current) {
+			nameProductSaleFreePriceRef.current.value = nameProductSaleFreePriceRef.current.value.trim();
+
+			if (nameProductSaleFreePriceRef.current.value.length === 0) {
+				setErrorModalSaleFreePrice("Введите название");
+				return false;
+			}
+		}
+
+		if (priceProductSaleFreePriceRef.current) {
+			if (priceProductSaleFreePriceRef.current.value.length === 0) {
+				setErrorModalSaleFreePrice("Введите стоимость");
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 	function handlerCompleteSaleFreePrice() {
-		setStateModalSaleFreePrice(false);
+		let validation = validationSaleFreePrice();
+
+		if (!validation) {
+			return null;
+		}
+
+		let code = "free-" + Date.now();
+
+		let product: ProductCart = {
+			id: null,
+			code: code,
+			name: nameProductSaleFreePriceRef.current ? nameProductSaleFreePriceRef.current.value : "",
+			price: priceProductSaleFreePriceRef.current ? Number(priceProductSaleFreePriceRef.current.value) : 1,
+			quantity: 1,
+			leftover: 999,
+		};
+
+		dispatch(add(product));
+		handlerStateSaleFreePrice(false);
+	}
+
+	function handlerStateSaleFreePrice(state: boolean) {
+		setStateModalSaleFreePrice(state);
+		setErrorModalSaleFreePrice(null);
 	}
 	// --
 
@@ -280,12 +320,12 @@ const Catalog = () => {
 
 							<div className={styles.currentCaregoryInfo}>
 								<div>
-									<img src={Icons.catalog} alt="" />
+									<img src={Icons.catalog} />
 									<span>{itemsCatalog[0].length}</span>
 								</div>
 								<div>|</div>
 								<div>
-									<img src={Icons.catalog} alt="" />
+									<img src={Icons.catalog} />
 									<span>{itemsCatalog[1].length}</span>
 								</div>
 							</div>
@@ -344,20 +384,22 @@ const Catalog = () => {
 			{/* продажа по свободной цене */}
 			<Modal
 				onComplete={handlerCompleteSaleFreePrice}
+				onState={handlerStateSaleFreePrice}
 				state={stateModalSaleFreePrice}
 				btnOkName="Добавить"
-				title="Продажа товара по свободной цене"
+				error={errorModalSaleFreePrice}
+				title="Продажа по свободной цене"
 			>
 				<div className={styles.saleFreePrice}>
 					<div className={styles.saleFreePriceForm}>
-						<div className={styles.formRow} onClick={onSelectNameSaleFreePrice}>
+						<div className={`${styles.nameProductSaleFreePrice} ${styles.formRow}`} onClick={onSelectNameSaleFreePrice}>
 							<label>Название</label>
 							<input ref={nameProductSaleFreePriceRef} type="text" defaultValue="Товар по свободной цене" />
 						</div>
 
-						<div className={styles.formRow}>
-							<label htmlFor="priceProductSaleFreePriceRef">Стоимость</label>
-							<input id="priceProductSaleFreePriceRef" ref={priceProductSaleFreePriceRef} type="number" />
+						<div className={`${styles.priceProductSaleFreePrice} ${styles.formRow}`}>
+							<label htmlFor="priceProductSaleFreePrice">Стоимость</label>
+							<input id="priceProductSaleFreePrice" ref={priceProductSaleFreePriceRef} type="number" />
 						</div>
 					</div>
 				</div>

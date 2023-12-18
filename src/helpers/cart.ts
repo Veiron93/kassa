@@ -14,7 +14,7 @@ export function priceProduct(product: ProductCart, discount: Discount | null = n
 		typeValueDiscount = discount.typeValue;
 		rangeDiscount = discount.range;
 	} else {
-		priceProduct = product.price * product.quanty;
+		priceProduct = product.price * product.quantity;
 		unitPriceProduct = product.price;
 	}
 
@@ -23,26 +23,26 @@ export function priceProduct(product: ProductCart, discount: Discount | null = n
 		// на один товар
 		if (rangeDiscount === 1) {
 			let x = product.price - valueDiscount;
-			let x2 = product.price * (product.quanty - 1);
+			let x2 = product.price * (product.quantity - 1);
 
 			priceProduct = x + x2;
-			unitPriceProduct = product.price - valueDiscount / product.quanty;
+			unitPriceProduct = product.price - valueDiscount / product.quantity;
 			discountSum = valueDiscount;
 		}
 
 		// на каждый товар
 		if (rangeDiscount === 2) {
-			let x = valueDiscount * product.quanty;
+			let x = valueDiscount * product.quantity;
 
-			priceProduct = product.price * product.quanty - x;
+			priceProduct = product.price * product.quantity - x;
 			unitPriceProduct = product.price - valueDiscount;
 			discountSum = x;
 		}
 
 		// распределение скидки на всё количество
 		if (rangeDiscount === 3) {
-			priceProduct = product.price * product.quanty - valueDiscount;
-			unitPriceProduct = product.price - valueDiscount / product.quanty;
+			priceProduct = product.price * product.quantity - valueDiscount;
+			unitPriceProduct = product.price - valueDiscount / product.quantity;
 			discountSum = valueDiscount;
 		}
 	}
@@ -52,30 +52,30 @@ export function priceProduct(product: ProductCart, discount: Discount | null = n
 		// на один товар
 		if (rangeDiscount === 1) {
 			let x = (product.price / 100) * valueDiscount;
-			let x2 = product.price * product.quanty;
+			let x2 = product.price * product.quantity;
 
 			priceProduct = x2 - x;
-			unitPriceProduct = (product.price * product.quanty - x) / product.quanty;
+			unitPriceProduct = (product.price * product.quantity - x) / product.quantity;
 			discountSum = x;
 		}
 
 		// на каждый товар
 		if (rangeDiscount === 2) {
 			let x = (product.price / 100) * valueDiscount;
-			let x2 = product.quanty * x;
+			let x2 = product.quantity * x;
 
-			priceProduct = product.price * product.quanty - x2;
+			priceProduct = product.price * product.quantity - x2;
 			unitPriceProduct = product.price - x;
-			discountSum = x * product.quanty;
+			discountSum = x * product.quantity;
 		}
 
 		// распределение скидки на всё количество
 		if (rangeDiscount === 3) {
 			let x = (product.price / 100) * valueDiscount;
 
-			priceProduct = (product.price - x) * product.quanty;
+			priceProduct = (product.price - x) * product.quantity;
 			unitPriceProduct = product.price - x;
-			discountSum = x * product.quanty;
+			discountSum = x * product.quantity;
 		}
 	}
 

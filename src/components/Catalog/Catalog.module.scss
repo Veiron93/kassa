@@ -158,6 +158,8 @@
 
 // продажа по свободной цене
 .saleFreePrice {
+	width: 400px;
+
 	&Form {
 		.formRow {
 			&:nth-child(1) {
@@ -168,9 +170,17 @@
 				display: block;
 				margin-bottom: 5px;
 			}
+		}
 
+		.nameProductSaleFreePrice {
 			input {
 				width: 100%;
+			}
+		}
+
+		.priceProductSaleFreePrice {
+			input {
+				width: 150px;
 			}
 		}
 	}

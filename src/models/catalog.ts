@@ -5,7 +5,7 @@ export interface Discount {
 }
 
 export interface Product {
-	id: number;
+	id: number | null;
 	code: string;
 	name: string;
 	price: number;
@@ -37,6 +37,6 @@ export interface Favorite {
 }
 
 export interface ProductCart extends Product {
-	quanty: number;
+	quantity: number;
 	discount?: Discount;
 }

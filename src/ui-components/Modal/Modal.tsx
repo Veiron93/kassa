@@ -12,6 +12,7 @@ interface Modal {
 	description?: string | number;
 	btnOkName?: string;
 	stateBtnCancel?: boolean;
+	error?: string | null;
 
 	onState?: any;
 	onComplete?: any;
@@ -50,6 +51,8 @@ const Modal = (props: Modal) => {
 						{props.description && <div className={styles.modalDescription}>{props.description}</div>}
 
 						<div className={styles.modalContent}>{props.children}</div>
+
+						{props.error && <div className={styles.modalError}>{props.error}</div>}
 
 						<div className={styles.modalBtns}>
 							<Button className={styles.ok} onClick={() => handlerCompleteModal()}>

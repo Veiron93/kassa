@@ -17,7 +17,7 @@ const Price = () => {
 
 	// сумма товаров
 	useEffect(() => {
-		let sumPrice = products.reduce((sum: number, current: any) => sum + current.price * current.quanty, 0);
+		let sumPrice = products.reduce((sum: number, current: any) => sum + current.price * current.quantity, 0);
 		setSumPrice(sumPrice);
 	}, [products]);
 

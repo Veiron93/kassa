@@ -37,6 +37,12 @@
 	&Content {
 	}
 
+	&Error {
+		color: red;
+		font-weight: 500;
+		font-size: 15px;
+	}
+
 	&Btns {
 		column-gap: 20px;
 		display: flex;

@@ -14,7 +14,7 @@ import { CartSlice } from "@/store/reducers/CartSlice";
 import { ProductDiscountSlice } from "@/store/reducers/ProductDiscountSlice";
 
 // componetns
-import Quanty from "@/components/Quanty/Quanty";
+import Quantity from "@/components/Quantity/Quantity";
 
 // ui-components
 import Icons from "@/ui-components/Icons/Icons";
@@ -29,13 +29,13 @@ const CartProductsList = (props: any) => {
 	const { productsDiscount, discountCart } = useAppSelector((state: any) => state.CartReducer);
 
 	// actions
-	const { changeQuanty, del, delDiscountProduct } = CartSlice.actions;
+	const { changeQuantity, del, delDiscountProduct } = CartSlice.actions;
 	const { show: showDiscount } = ProductDiscountSlice.actions;
 	// --
 
-	// QUANTY PRODUCT
-	function handlerQuanty(value: number) {
-		dispatch(changeQuanty({ code: product.code, quanty: Number(value) }));
+	// QUANTITY PRODUCT
+	function handlerQuantity(value: number) {
+		dispatch(changeQuantity({ code: product.code, quantity: Number(value) }));
 	}
 	// --
 
@@ -57,7 +57,7 @@ const CartProductsList = (props: any) => {
 		} else {
 			onRecountPrice();
 		}
-	}, [product.quanty, productsDiscount]);
+	}, [product.quantity, productsDiscount]);
 
 	function onRecountPrice(discount = null) {
 		const recountResult = priceProduct(product, discount);
@@ -100,7 +100,7 @@ const CartProductsList = (props: any) => {
 					</div>
 				</div>
 
-				<Quanty className={styles.quantyProduct} value={product.quanty} max={product.leftover} onChange={handlerQuanty} />
+				<Quantity className={styles.quantityProduct} value={product.quantity} max={product.leftover} onChange={handlerQuantity} />
 			</div>
 
 			{stateProductMore === true && (
