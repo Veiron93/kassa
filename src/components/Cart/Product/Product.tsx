@@ -20,8 +20,6 @@ import Quantity from "@/components/Quantity/Quantity";
 import Icons from "@/ui-components/Icons/Icons";
 
 const CartProductsList = (props: any) => {
-	const product: ProductCart = props.product;
-
 	// STORE
 	const dispatch = useAppDispatch();
 
@@ -32,6 +30,9 @@ const CartProductsList = (props: any) => {
 	const { changeQuantity, del, delDiscountProduct } = CartSlice.actions;
 	const { show: showDiscount } = ProductDiscountSlice.actions;
 	// --
+
+	const product: ProductCart = props.product;
+	const isFreePrice = product.code.split("-")[0] === "free" ? true : false;
 
 	// QUANTITY PRODUCT
 	function handlerQuantity(value: number) {
@@ -48,7 +49,6 @@ const CartProductsList = (props: any) => {
 
 	// PRICE
 	const [priceProductTotal, setPriceProductTotal] = useState<number>(0);
-	//const [unitPriceProduct, setUnitPriceProduct] = useState<number>(0);
 	const [discountSum, setDiscountSum] = useState<number>(0);
 
 	useEffect(() => {
@@ -63,7 +63,6 @@ const CartProductsList = (props: any) => {
 		const recountResult = priceProduct(product, discount);
 
 		setPriceProductTotal(Number(recountResult.priceProduct.toFixed(2)));
-		//setUnitPriceProduct(Number(recountResult.unitPriceProduct.toFixed(2)));
 		setDiscountSum(Number(recountResult.discountSum.toFixed(2)));
 	}
 	// --
@@ -88,14 +87,11 @@ const CartProductsList = (props: any) => {
 				</div>
 
 				<div className={styles.productPrice}>
-					{/* <div className={styles.productPrice__unit}>{unitPriceProduct} / шт</div> */}
-
 					<div className={styles.productPrice__discount} onClick={() => !discountCart && dispatch(showDiscount(product))}>
 						{discountSum ? <span>- {discountSum} р.</span> : <img src={Icons.discount} alt="" />}
 					</div>
 
 					<div className={styles.productPrice__total}>
-						{/* <span>{unitPriceProduct} шт. </span> */}
 						<span>{priceProductTotal} р</span>
 					</div>
 				</div>
@@ -106,8 +102,9 @@ const CartProductsList = (props: any) => {
 			{stateProductMore === true && (
 				<div className={styles.productOtherWrapper}>
 					<div className={styles.info}>
-						<p>Код: {product.code}</p>
-						<p>Остаток: {product.leftover}</p>
+						{!isFreePrice && <p>Код: {product.code}</p>}
+						{!isFreePrice && <p>Остаток: {product.leftover}</p>}
+						{isFreePrice && <p>Свободная цена</p>}
 						<p>Цена за 1 ед: {product.price}</p>
 					</div>
 
@@ -118,28 +115,6 @@ const CartProductsList = (props: any) => {
 					</div>
 				</div>
 			)}
-
-			{/* <div className={styles.productName}>
-				<span>{product.name}</span>
-				<span>
-					Код: <span>{product.code}</span>
-				</span>
-			</div>
-
-			<div className={styles.productPrice}>
-				<div className={styles.productPrice__total}>{priceProductTotal}</div>
-				<div className={styles.productPrice__unit}>{unitPriceProduct} / шт.</div>
-			</div>
-
-			<div className={styles.productBtns}>
-				<div className={`${styles.productBtn} ${styles.productBtnDiscount}`} onClick={() => !discountCart && dispatch(showDiscount(product))}>
-					{discountSum ? <span>- {discountSum} р.</span> : <img src={Icons.discount} alt="" />}
-				</div>
-
-				<div className={`${styles.productBtn} ${styles.productBtnDel}`} onClick={onDelProduct}>
-					<img src={Icons.trash} alt="" />
-				</div>
-			</div> */}
 		</div>
 	);
 };
