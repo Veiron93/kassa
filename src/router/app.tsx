@@ -25,9 +25,9 @@ const app = [
 			});
 
 			// user
-			await isActive("user").then((response) => {
-				if (!response) throw redirect("/auth/user");
-			});
+			// await isActive("user").then((response) => {
+			// 	if (!response) throw redirect("/auth/user");
+			// });
 
 			return true;
 		},

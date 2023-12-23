@@ -10,9 +10,16 @@ export function userIsActive(data: any) {
 }
 
 export function userLogIn(id: string, password: string) {
-	return new Promise((resolve) => {
-		resolve(UsersData.user);
-	});
+	const usersDataLocalStorage = localStorage.getItem("users");
+	const users = usersDataLocalStorage ? JSON.parse(usersDataLocalStorage) : [];
+
+	if (!users) {
+		return false;
+	}
+
+	const user = users.find((user: any) => user.id === id && user.pincode === password);
+
+	return user ? true : false;
 }
 
 export function getUser(userAuth: any) {

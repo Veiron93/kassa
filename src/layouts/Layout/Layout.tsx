@@ -26,21 +26,23 @@ function Layout() {
 	const dispatch = useAppDispatch();
 
 	// state
-	//const { state: stateProductCode } = useAppSelector((state: any) => state.CodeProductReducer);
+	const { activeUserId: activeUserIdStore } = useAppSelector((state: any) => state.UsersReducer);
 
 	// actions
-	const { setUser } = UsersSlice.actions;
+	const { setUsers, setActiveUserId } = UsersSlice.actions;
 	const { setProducts: setProductsStore, setCategories: setCategoriesStore, setFavorites: setFavoritesStore } = CatalogSlice.actions;
 	// --
 
-	// ПОЛЬЗОВАТЕЛЬ
+	// ПОЛЬЗОВАТЕЛИ
 	useEffect(() => {
-		const userAuth = localStorage.getItem("user");
+		// активный пользователь
+		const activeUserId = JSON.parse(localStorage.getItem("user") || "null");
+		dispatch(setActiveUserId(activeUserId));
 
-		getUser(userAuth).then((response) => {
-			dispatch(setUser(response));
-		});
-	});
+		// все пользователи
+		const users = JSON.parse(localStorage.getItem("users") || "[]");
+		dispatch(setUsers(users));
+	}, []);
 
 	// ЗАГРУЗКА КАТАЛОГА
 	useEffect(() => {
@@ -78,7 +80,7 @@ function Layout() {
 				<div className={styles.layoutSideHeader}>
 					<StatusKassa />
 					<Navigation />
-					<User />
+					{activeUserIdStore && <User />}
 					<Logout />
 				</div>
 

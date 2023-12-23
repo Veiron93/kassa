@@ -19,9 +19,11 @@ const auth = [
 			{
 				path: "/auth",
 				element: <KassaAuthorization />,
+
 				loader: async () => {
 					// kassa
 					await isActive("kassa").then((response) => {
+						console.log(response);
 						if (response) throw redirect("/auth/user");
 					});
 
@@ -32,16 +34,19 @@ const auth = [
 			{
 				path: "user",
 				element: <UserAuthorization />,
+
 				loader: async () => {
 					// kassa
-					await isActive("kassa").then((response) => {
-						if (!response) throw redirect("/auth");
+					await isActive("kassa").then((response: any) => {
+						if (response.data && response.data.status !== "success") {
+							throw redirect("/auth");
+						}
 					});
 
-					// kassa
-					await isActive("user").then((response) => {
-						if (response) throw redirect("/");
-					});
+					// user
+					// await isActive("user").then((response) => {
+					// 	if (response) throw redirect("/");
+					// });
 
 					return true;
 				},

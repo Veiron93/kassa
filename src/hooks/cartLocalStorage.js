@@ -1,7 +1,7 @@
-export function setCartLocalStore(products, productsDiscount, discountCart) {
+export function setCartLocalStore(products = null, productsDiscount = null, discountCart = null) {
 	const cart = {
 		products: [],
-		discountProducts: [],
+		discountProducts: productsDiscount ?? null,
 		discount: discountCart ?? null,
 	};
 
@@ -10,7 +10,7 @@ export function setCartLocalStore(products, productsDiscount, discountCart) {
 		products.forEach((product) => {
 			let item = {
 				code: product.code,
-				quanty: product.quanty,
+				quantity: product.quantity,
 				discount: productsDiscount[Number(product.code)] ?? null,
 			};
 

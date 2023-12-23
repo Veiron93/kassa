@@ -4,8 +4,9 @@ import axios from "axios";
 import styles from "./kassaAuthorization.module.scss";
 
 // services
-//import { kassaIsActive } from "@/services/kassa";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+//71QSWY0BN87VT2UO
 
 const KassaAuthorization = () => {
 	const navigation = useNavigate();
@@ -38,14 +39,12 @@ const KassaAuthorization = () => {
 				const kassa = {
 					name: response.data.name,
 					token: response.data.device_token,
-					mode: "online",
+					mode: 1,
 				};
 
 				localStorage.setItem("kassa", JSON.stringify(kassa));
 				navigation("/auth/user");
 			});
-
-		//device_key: "QRPR1RXFEXMCLT0O";
 	}
 
 	return (

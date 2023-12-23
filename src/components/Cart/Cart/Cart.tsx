@@ -1,7 +1,14 @@
+import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
-// data
-import productsData from "@/data/catalog";
+//store
+import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
+
+import { CartSlice } from "@/store/reducers/CartSlice";
+import { CatalogSlice } from "@/store/reducers/CatalogSlice";
+
+// models
+import { Product, ProductCart } from "@/models/catalog";
 
 // hooks
 import { getCartLocalStore, setCartLocalStore } from "@/hooks/cartLocalStorage";
@@ -13,79 +20,83 @@ import ProductDiscount from "@/components/Cart/ProductDiscount/ProductDiscount";
 import Discount from "@/components/Cart/Discount/Discount";
 import Header from "@/components/Cart/Header/Header";
 
-//store
-import { useAppSelector } from "@/store/hooks/redux";
-import { useEffect, useState } from "react";
-
 const Cart = () => {
-	const { products, productsDiscount, discountCart } = useAppSelector((state: any) => state.CartReducer);
+	// STORE
+	const dispatch = useAppDispatch();
 
+	// state
+	const { products: productsCart, productsDiscount, discountCart } = useAppSelector((state: any) => state.CartReducer);
+	const { products: productsCatalog } = useAppSelector((state: any) => state.CatalogReducer);
+
+	// actions
+	const { add, addDiscountProduct, addDiscountCart } = CartSlice.actions;
+	// --
+
+	// инициализация товаров в корзине
 	const [initCart, setInitCart] = useState<boolean>(false);
 
-	// инициализация корзины
-	// function cartInit() {
-	// 	if (initCart) {
-	// 		setCartLocalStore(products, productsDiscount, discountCart);
-	// 	}
-
-	// 	setInitCart(true);
-
-	// 	const cartLocalStorage = getCartLocalStore();
-	// 	console.log(cartLocalStorage);
-
-	// 	// const productsCartLocalStorage = [];
-	// 	// if (cartLocalStorage && cartLocalStorage.products) {
-	// 	// 	console.log(cartLocalStorage);
-	// 	// }
-	// }
-
-	// cartInit();
-
-	// инициализация корзины
 	useEffect(() => {
-		const cartLocalStorage = getCartLocalStore();
+		if (productsCatalog.length > 0 && !initCart) {
+			const cartLocalStorage = getCartLocalStore();
 
-		if (cartLocalStorage && cartLocalStorage.products) {
-			let codes: string[] = [];
+			// товары
+			if (cartLocalStorage && cartLocalStorage.products) {
+				for (let productCart of cartLocalStorage.products) {
+					let product = productsCatalog.find((product: Product) => product.code === productCart.code);
 
-			cartLocalStorage.products.forEach((product: any) => {
-				codes.push(product.code);
+					if (product) {
+						let item: ProductCart = {
+							id: product.id,
+							name: product.name,
+							code: product.code,
+							categoryId: product.categoryId,
+							quantity: productCart.quantity,
+							price: product.price,
+							leftover: product.leftover,
+						};
 
-				//console.log(codes.length);
-
-				if (codes.length === cartLocalStorage.products.length) {
-					// productsData.products.forEach(item=>{
-					// 	if(item.code === ){
-					// 	}
-					// })
-					// console.log(codes);
+						dispatch(add(item));
+					}
 				}
-			});
+			}
 
-			//console.log(codes);
+			// скидка на товары
+			if (cartLocalStorage && Object.keys(cartLocalStorage.discountProducts)) {
+				for (let discountProduct in cartLocalStorage.discountProducts) {
+					dispatch(addDiscountProduct({ productCode: discountProduct, discount: cartLocalStorage.discountProducts[discountProduct] }));
+				}
+			}
 
-			//productsData.
+			// скидка на весь заказ
+			if (cartLocalStorage && cartLocalStorage.discount) {
+				dispatch(addDiscountCart({ discount: cartLocalStorage.discount }));
+			}
+
+			setInitCart(true);
 		}
-	}, []);
 
-	// сохранение корзины в LocalStorage
-	useDeepCompareEffect(() => {
-		if (initCart) {
-			setCartLocalStore(products, productsDiscount, discountCart);
-		}
+		// после инициализации вызвать метод слежения Изменить init слежения
+	}, [productsCatalog]);
 
-		setInitCart(true);
-	}, [products, productsDiscount, discountCart]);
+	// следит за изменениями в корзине
+	const [initWatchChangeCart, setInitWatchChangeCart] = useState<boolean>(false);
+
+	// useDeepCompareEffect(() => {
+	// 	if (initWatchChangeCart) {
+	// 		setCartLocalStore(productsCart, productsDiscount, discountCart);
+	// 	}
+	// 	setInitWatchChangeCart(true);
+	// }, [productsCart, productsDiscount, discountCart]);
 
 	return (
 		<>
 			{/* шапка корзины */}
-			{products.length > 0 && <Header />}
+			{productsCart.length > 0 && <Header />}
 
 			{/* список товаров */}
 			<CartProductsList />
 
-			{products.length > 0 && (
+			{productsCart.length > 0 && (
 				<>
 					{/* трей  */}
 					<CartTray />

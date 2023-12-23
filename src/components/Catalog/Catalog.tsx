@@ -3,13 +3,11 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./Catalog.module.scss";
 
 // models
-import { ProductCart, Product, Category, ProductFavorite, CategoryFavorite, Favorite } from "@/models/catalog";
+import { ProductCart, Product, Category, ProductFavorite, CategoryFavorite } from "@/models/catalog";
 
 //store
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
-
 import { CartSlice } from "@/store/reducers/CartSlice";
-import { CatalogSlice } from "@/store/reducers/CatalogSlice";
 
 // services
 import { getProduct, getCategory } from "@/services/catalog";
@@ -21,7 +19,6 @@ import CategoryCatalog from "@/components/Catalog/CategoryCatalog/CategoryCatalo
 // ui-components
 import Icons from "@/ui-components/Icons/Icons";
 import Modal from "@/ui-components/Modal/Modal";
-import catalog from "@/data/catalog";
 
 const Catalog = () => {
 	// STORE
@@ -78,12 +75,12 @@ const Catalog = () => {
 		let categories: Category[] = [];
 		let products: Product[] = [];
 
-		categories = catalog.categories.filter((category) => category.parentId === categoryId);
-		products = catalog.products.filter((product) => product.categoryId === categoryId);
+		categories = categoriesCatalog.filter((category: Category) => category.parentId === categoryId);
+		products = productsCatalog.filter((product: Product) => product.categoryId === categoryId);
 
 		// текущая категория
 		if (categoryId) {
-			let currentCategory = catalog.categories.find((category) => category.id === categoryId);
+			let currentCategory = categoriesCatalog.find((category: Category) => category.id === categoryId);
 			setCurrenCategory(currentCategory);
 		} else {
 			setCurrenCategory(null);
@@ -102,8 +99,10 @@ const Catalog = () => {
 	}
 
 	useEffect(() => {
-		handlerSelectCategory();
-	}, []);
+		if (productsCatalog.length > 0 || categoriesCatalog.length > 0) {
+			handlerSelectCategory();
+		}
+	}, [productsCatalog && categoriesCatalog]);
 
 	// избранное
 	const [itemsCatalogFavorites, setItemsCatalogFavorites] = useState<Array<ProductFavorite | CategoryFavorite | null> | []>([]);

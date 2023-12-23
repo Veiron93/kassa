@@ -11,32 +11,6 @@ interface CartState {
 }
 
 const initialState: CartState = {
-	// список товаров
-	// products: [
-	// 	{
-	// 		code: "6953156207295",
-	// 		name: "Адаптер питания Baseus 30w (чёрный)",
-	// 		price: 17700,
-	// 		leftover: 10,
-	// 		quanty: 2,
-	// 	},
-	// 	{
-	// 		code: "6932172606222",
-	// 		name: "Чехол iPhone 15 UGREEN",
-	// 		price: 2300,
-	// 		leftover: 2,
-	// 		quanty: 1,
-	// 	},
-
-	// 	// {
-	// 	// 	code: "6932172606909",
-	// 	// 	name: "Адаптер питания Baseus 10.5w (чёрный)",
-	// 	// 	price: 1200,
-	// 	// 	leftover: 12,
-	// 	// 	quanty: 3,
-	// 	// },
-	// ],
-
 	products: [],
 
 	// возможность добавить товар (отслеживает на странице событие ввода)
@@ -102,6 +76,9 @@ export const CartSlice: any = createSlice({
 		addDiscountProduct(state, action) {
 			let productCode = action.payload.productCode;
 			let discount = action.payload.discount;
+
+			console.log(productCode);
+			console.log(discount);
 
 			state.productsDiscount[productCode] = discount;
 		},

@@ -1,7 +1,9 @@
 import axios from "axios";
 
 export function kassaIsActive(token: string) {
-	return new Promise((resolve) => {
-		resolve(true);
+	return axios.get(process.env.REACT_APP_SERVER_LINK + "api/kassas/check/", {
+		headers: {
+			"kassa-token": token,
+		},
 	});
 }

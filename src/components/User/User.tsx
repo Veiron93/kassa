@@ -3,13 +3,15 @@ import styles from "./User.module.scss";
 //store
 import { useAppSelector } from "@/store/hooks/redux";
 
-// components
-
 const User = () => {
+	// STORE
 	// state
-	const { user } = useAppSelector((state: any) => state.UsersReducer);
+	const { activeUserId, users } = useAppSelector((state: any) => state.UsersReducer);
+	// --
 
-	return <>{user && user.name && <div className={styles.user}>{user.name}</div>}</>;
+	const user = users.find((user: any) => user.id === activeUserId);
+
+	return <>{user && user.first_name && <div className={styles.user}>{user.first_name}</div>}</>;
 };
 
 export default User;

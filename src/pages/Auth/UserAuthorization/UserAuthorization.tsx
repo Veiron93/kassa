@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 
 import styles from "./userAuthorization.module.scss";
 
-// data
-//import usersData from "@/data/users";
-
 // services
 import { userLogIn, getUsers } from "@/services/users";
 
@@ -27,13 +24,11 @@ const UserAuthorization = () => {
 	//const { products } = useAppSelector((state: any) => state.UsersReducer);
 
 	// actions
-	//const { setUser: setUserStore } = UsersSlice.actions;
-
+	const { setUsers: setUsersStore, setActiveUserId: setActiveUserIdStore } = UsersSlice.actions;
 	// --
 
 	// ROUTER
 	const navigation = useNavigate();
-
 	// --
 
 	const [stateForm, setStateForm] = useState<boolean>(false);
@@ -43,30 +38,60 @@ const UserAuthorization = () => {
 	const [selectedUserId, setSelectedUserId] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
-	useEffect(() => {
-		const dataKassa: any = localStorage.getItem("kassa");
-		const dataKassaJSON = JSON.parse(dataKassa);
+	// удалить
+	const mode = 1;
+	//--
 
-		if (dataKassaJSON.token) {
-			getUsers(dataKassaJSON.token).then((response: any) => {
-				if (response) {
-					console.log(response.data);
-					setUsers(response.data);
-				}
-			});
+	useEffect(() => {
+		const kassa: any = JSON.parse(localStorage.getItem("kassa") ?? "null");
+
+		if (kassa.token) {
+			// онлайн режим
+			if (mode) {
+				getUsers(kassa.token).then((response: any) => {
+					let users: any = [];
+
+					// вот тут нужно шифровать пин код пользователя
+					if (response && response.data) {
+						users = [...response.data];
+						setUsers(users);
+					}
+
+					localStorage.setItem("users", JSON.stringify(users));
+				});
+			}
+
+			// оффлайн режим
+			if (!mode) {
+				const users: any = JSON.parse(localStorage.getItem("users") ?? "[]");
+
+				setUsers(users);
+				localStorage.setItem("users", JSON.stringify(users));
+			}
 		}
 	}, []);
 
+	// выбор пользователя
 	function onSelectUser(id: string) {
 		setSelectedUserId(id);
 		setStateForm(true);
+		reset();
 	}
 
+	// скрыть форму ввода пароля
 	function cancel() {
 		setSelectedUserId("");
 		setStateForm(false);
+		reset();
 	}
 
+	// сброс формы ввода пароля
+	function reset() {
+		setPassword("");
+		setError(null);
+	}
+
+	// валидация пароля
 	function validationUserAuth() {
 		setPassword(password.trim());
 
@@ -76,36 +101,28 @@ const UserAuthorization = () => {
 		}
 
 		if (password.length === 0) {
-			setError("Введите ПИН-код");
+			setError("Введите код");
 			return;
 		}
 
 		if (password.length > 0 && password.length < 4) {
-			setError("Введите корректный ПИН-код");
+			setError("Введите корректный код");
 			return;
 		}
 
 		onUserAuth();
 	}
 
+	// авторизация пользователя
 	function onUserAuth() {
-		// 0
-		userLogIn(selectedUserId, password).then((response: any) => {
-			if (response) {
-				const user = {
-					id: response.id,
-					token: response.token,
-					// first_name: ,
-					// middle_name: ,
-					// last_name:
-				};
+		const user: any = userLogIn(selectedUserId, password);
 
-				localStorage.setItem("user", JSON.stringify(user));
-				navigation("/");
-			} else {
-				setError("Ошибка");
-			}
-		});
+		if (user) {
+			localStorage.setItem("user", selectedUserId);
+			navigation("/");
+		} else {
+			setError("Введен неверный код");
+		}
 	}
 
 	return (
@@ -129,7 +146,7 @@ const UserAuthorization = () => {
 			{stateForm && (
 				<div className={styles.userAuthorization_form}>
 					<label>
-						<span>Введите ПИН-код</span>
+						<span>Введите код</span>
 						<input type="password" maxLength={4} value={password} onChange={(e) => setPassword(e.target.value)} />
 					</label>
 
