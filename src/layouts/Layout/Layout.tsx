@@ -4,8 +4,10 @@ import { useEffect } from "react";
 import styles from "./Layout.module.scss";
 
 // services
-import { getUser } from "@/services/users";
 import { getProductsCatalog, getCategoriesCatalog, getFavoritesCatalog, setItemsCatalogDB } from "@/services/catalog";
+
+// hooks
+import { useMode } from "@/hooks/useMode";
 
 //store
 import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
@@ -70,6 +72,10 @@ function Layout() {
 	}, []);
 
 	function checkCatalog() {}
+
+	// РЕЖИМ
+	useMode();
+	//--
 
 	return (
 		<main className={styles.layout}>
