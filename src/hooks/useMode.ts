@@ -1,9 +1,11 @@
-import axios from "axios";
 import { useEffect } from "react";
 
 //store
 import { useAppDispatch } from "@/store/hooks/redux";
 import { ModeSlice } from "@/store/reducers/ModeSlice";
+
+// services
+import { modeCheck } from "@/services/mode";
 
 export function useMode() {
 	// STORE
@@ -14,7 +16,7 @@ export function useMode() {
 	// --
 
 	// время обновления в секундах
-	const updateTime = 20;
+	const updateTime = 3;
 
 	useEffect(() => {
 		modeCheck()
@@ -27,11 +29,11 @@ export function useMode() {
 			await modeCheck()
 				.then(() => {
 					state = true;
-					console.log("онлайн");
+					//console.log("онлайн");
 				})
 				.catch(() => {
 					state = false;
-					console.log("офлайн");
+					//console.log("офлайн");
 				});
 
 			dispatch(setStateMode(state));
@@ -39,8 +41,4 @@ export function useMode() {
 
 		return () => clearInterval(idIntervalCheck);
 	}, []);
-}
-
-export function modeCheck() {
-	return axios.get(String(process.env.REACT_APP_SERVER_LINK));
 }

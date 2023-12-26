@@ -1,7 +1,10 @@
 import { redirect } from "react-router-dom";
 
 // utils
-import { isActive } from "@/utils/auth";
+import { isActiveKassa } from "@/utils/kassa";
+
+// services
+import { modeCheck } from "@/services/mode";
 
 // components
 import Layout from "../layouts/Layout/Layout";
@@ -13,21 +16,48 @@ import Payment from "../pages/Payment/Payment";
 import Settings from "../pages/Settings/Settings";
 import PaymentResult from "../pages/Payment/PaymentResult";
 
+let modeState: boolean | null = null;
+
 const app = [
 	{
 		path: "/",
 		element: <Layout />,
 
 		loader: async () => {
+			//console.log(3333);
+
+			await modeCheck()
+				.then(() => (modeState = true))
+				.catch(() => (modeState = false));
+
 			// kassa
-			await isActive("kassa").then((response) => {
-				if (!response) throw redirect("/auth");
-			});
+			if (modeState) {
+				//console.log("есть подключение к сети");
+
+				await isActiveKassa().then((response) => {
+					if (!response) {
+						localStorage.removeItem("user");
+						localStorage.removeItem("kassa");
+
+						throw redirect("/auth");
+					}
+				});
+			} else {
+				console.log("нет подключения к сети");
+
+				const kassa = JSON.parse(localStorage.getItem("kassa") ?? "null");
+
+				if (!kassa) {
+					throw redirect("/auth");
+				}
+			}
 
 			// user
-			// await isActive("user").then((response) => {
-			// 	if (!response) throw redirect("/auth/user");
-			// });
+			const user = JSON.parse(localStorage.getItem("user") ?? "null");
+
+			if (!user) {
+				throw redirect("/auth/user");
+			}
 
 			return true;
 		},

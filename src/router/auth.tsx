@@ -1,7 +1,11 @@
 import { redirect } from "react-router-dom";
 
 // utils
-import { isActive } from "@/utils/auth";
+import { isActiveKassa } from "@/utils/kassa";
+
+// services
+import { onUserIsLogIn } from "@/services/users";
+import { modeCheck } from "@/services/mode";
 
 // components
 import LayoutAuth from "@/layouts/LayoutAuth/LayoutAuth";
@@ -9,6 +13,8 @@ import LayoutAuth from "@/layouts/LayoutAuth/LayoutAuth";
 // views
 import KassaAuthorization from "@/pages/Auth/KassaAuthorization/KassaAuthorization";
 import UserAuthorization from "@/pages/Auth/UserAuthorization/UserAuthorization";
+
+let modeState: boolean | null = null;
 
 const auth = [
 	{
@@ -21,11 +27,17 @@ const auth = [
 				element: <KassaAuthorization />,
 
 				loader: async () => {
-					// kassa
-					await isActive("kassa").then((response) => {
-						console.log(response);
-						if (response) throw redirect("/auth/user");
-					});
+					await modeCheck()
+						.then(() => (modeState = true))
+						.catch(() => (modeState = false));
+
+					if (modeState) {
+						await isActiveKassa().then((response) => {
+							if (response) throw redirect("/auth/user");
+						});
+					} else {
+						console.log("невозможно активировать кассу без доступа к интернет");
+					}
 
 					return true;
 				},
@@ -36,17 +48,29 @@ const auth = [
 				element: <UserAuthorization />,
 
 				loader: async () => {
+					//console.log(22222);
+
+					await modeCheck()
+						.then(() => (modeState = true))
+						.catch(() => (modeState = false));
+
 					// kassa
-					await isActive("kassa").then((response: any) => {
-						if (response.data && response.data.status !== "success") {
-							throw redirect("/auth");
-						}
-					});
+					if (modeState) {
+						await isActiveKassa().then((response) => {
+							if (!response) {
+								throw redirect("/auth");
+							}
+						});
+					} else {
+						console.log("невозможно активировать кассу без доступа к интернет");
+					}
 
 					// user
-					// await isActive("user").then((response) => {
-					// 	if (response) throw redirect("/");
-					// });
+					const user = onUserIsLogIn();
+
+					if (user !== null) {
+						throw redirect("/");
+					}
 
 					return true;
 				},

@@ -1,14 +1,11 @@
 import axios from "axios";
 
-import UsersData from "@/data/users";
-
-export function userIsActive(data: any) {
-	// отправляем токен пользователя и токен кассы
-	return new Promise((resolve) => {
-		resolve(true);
-	});
+// возвращает id пользователя если залогинен, иначе null
+export function onUserIsLogIn(): number | null {
+	return JSON.parse(localStorage.getItem("user") ?? "null");
 }
 
+// авторизация пользователя
 export function userLogIn(id: string, password: string) {
 	const usersDataLocalStorage = localStorage.getItem("users");
 	const users = usersDataLocalStorage ? JSON.parse(usersDataLocalStorage) : [];
@@ -17,17 +14,10 @@ export function userLogIn(id: string, password: string) {
 		return false;
 	}
 
-	const user = users.find((user: any) => user.id === id && user.pincode === password);
-
-	return user ? true : false;
+	return users.find((user: any) => user.id === id && user.password === password);
 }
 
-export function getUser(userAuth: any) {
-	return new Promise((resolve) => {
-		resolve(UsersData.user);
-	});
-}
-
+// возвращает список пользователей, привязанных к кассе
 export function getUsers(tokenKassa: string) {
 	return axios.get(process.env.REACT_APP_SERVER_LINK + "api/kassas/personal/", {
 		headers: {

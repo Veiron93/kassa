@@ -29,6 +29,7 @@ function Layout() {
 
 	// state
 	const { activeUserId: activeUserIdStore } = useAppSelector((state: any) => state.UsersReducer);
+	const { state: stateMode } = useAppSelector((state: any) => state.ModeReducer);
 
 	// actions
 	const { setUsers, setActiveUserId } = UsersSlice.actions;
@@ -76,6 +77,10 @@ function Layout() {
 	// РЕЖИМ
 	useMode();
 	//--
+
+	// useEffect(() => {
+	// 	console.log(stateMode);
+	// }, [stateMode]);
 
 	return (
 		<main className={styles.layout}>

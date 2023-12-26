@@ -21,7 +21,7 @@ const UserAuthorization = () => {
 	const dispatch = useAppDispatch();
 
 	// state
-	//const { products } = useAppSelector((state: any) => state.UsersReducer);
+	const { state: stateMode } = useAppSelector((state: any) => state.ModeReducer);
 
 	// actions
 	const { setUsers: setUsersStore, setActiveUserId: setActiveUserIdStore } = UsersSlice.actions;
@@ -38,16 +38,12 @@ const UserAuthorization = () => {
 	const [selectedUserId, setSelectedUserId] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
-	// удалить
-	const mode = 1;
-	//--
-
 	useEffect(() => {
 		const kassa: any = JSON.parse(localStorage.getItem("kassa") ?? "null");
 
 		if (kassa.token) {
 			// онлайн режим
-			if (mode) {
+			if (stateMode) {
 				getUsers(kassa.token).then((response: any) => {
 					let users: any = [];
 
@@ -62,7 +58,8 @@ const UserAuthorization = () => {
 			}
 
 			// оффлайн режим
-			if (!mode) {
+			if (!stateMode) {
+				console.log(888888);
 				const users: any = JSON.parse(localStorage.getItem("users") ?? "[]");
 
 				setUsers(users);
